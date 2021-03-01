@@ -1,0 +1,51 @@
+server:
+  port: 88
+
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: service-product
+          uri: lb://service-product
+          predicates:
+            - Path=/api/pms/**
+          filters:
+            - RewritePath=/api/pms(?<segment>/?.*), /pms$\{segment}
+        - id: service-ware
+          uri: lb://service-ware
+          predicates:
+            - Path=/api/wms/**
+          filters:
+            - RewritePath=/api/wms(?<segment>/?.*), /wms$\{segment}
+        - id: service-order
+          uri: lb://service-order
+          predicates:
+            - Path=/api/oms/**
+          filters:
+            - RewritePath=/api/oms(?<segment>/?.*), /oms$\{segment}
+        - id: service-coupon
+          uri: lb://service-coupon
+          predicates:
+            - Path=/api/sms/**
+          filters:
+            - RewritePath=/api/sms(?<segment>/?.*), /sms$\{segment}
+        - id: service-member
+          uri: lb://service-member
+          predicates:
+            - Path=/api/ums/**
+          filters:
+            - RewritePath=/api/ums(?<segment>/?.*), /ums$\{segment}
+        - id: renren-fast
+          uri: lb://renren-fast
+          predicates:
+            - Path=/api/**
+          filters:
+            - RewritePath=/api(?<segment>/?.*), /renren-fast$\{segment}
+
+

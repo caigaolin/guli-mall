@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.muke.common.utils.PageUtils;
 import com.muke.gulimall.pms.entity.CategoryEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,5 +17,17 @@ import java.util.Map;
 public interface CategoryService extends IService<CategoryEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    /**
+     * 获取树形分类数据
+     * @return List<CategoryEntity>
+     */
+    List<CategoryEntity> getCategoryTree();
+
+    /**
+     * 删除分类
+     * @param catIds 分类id数组
+     */
+    void deleteBatchCate(Long[] catIds);
 }
 

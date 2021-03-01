@@ -17,7 +17,7 @@
         <module>service-order</module>
         <module>service-ware</module>
         <module>service-coupon</module>
-
+        <module>renren-fast</module>
     </modules>
 
     <dependencies>
@@ -51,6 +51,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
+            <scope>provided</scope>
         </dependency>
         <!--热部署-->
         <dependency>

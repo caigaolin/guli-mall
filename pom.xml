@@ -9,9 +9,7 @@
     <modules>
         <module>service</module>
         <module>common</module>
-        <module>renren-generator</module>
-        <module>renren-fast</module>
-        <module>service-gateway</module>
+        <module>infrastructure</module>
     </modules>
     <name>guli-mall</name>
     <description>谷粒商城-父工程</description>
@@ -153,4 +151,18 @@
         </dependencies>
     </dependencyManagement>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
