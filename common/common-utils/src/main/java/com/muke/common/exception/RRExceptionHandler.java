@@ -8,13 +8,21 @@
 
 package com.muke.common.exception;
 
+import com.muke.common.enums.CustomizeExceptionEnum;
 import com.muke.common.utils.R;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * 异常处理器
@@ -54,6 +62,17 @@ public class RRExceptionHandler {
 		logger.error(e.getMessage(), e);
 		return R.error("没有权限，请联系管理员授权");
 	}*/
+
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public R handleValidException(MethodArgumentNotValidException e){
+		logger.error(e.getMessage(), e);
+		BindingResult bindingResult = e.getBindingResult();
+		Map<String, Object> errorMap = new HashMap<>();
+		bindingResult.getFieldErrors().forEach(error -> {
+			errorMap.put(error.getField(), error.getDefaultMessage());
+		});
+		return R.error(CustomizeExceptionEnum.ENTITY_VALID_EX).put("data", errorMap);
+	}
 
 	@ExceptionHandler(Exception.class)
 	public R handleException(Exception e){

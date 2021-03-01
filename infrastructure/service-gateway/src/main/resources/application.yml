@@ -16,31 +16,37 @@ spring:
           predicates:
             - Path=/api/pms/**
           filters:
-            - RewritePath=/api/pms(?<segment>/?.*), /pms$\{segment}
+            - RewritePath=/api(?<segment>/?.*), $\{segment}
         - id: service-ware
           uri: lb://service-ware
           predicates:
             - Path=/api/wms/**
           filters:
-            - RewritePath=/api/wms(?<segment>/?.*), /wms$\{segment}
+            - RewritePath=/api(?<segment>/?.*), $\{segment}
         - id: service-order
           uri: lb://service-order
           predicates:
             - Path=/api/oms/**
           filters:
-            - RewritePath=/api/oms(?<segment>/?.*), /oms$\{segment}
+            - RewritePath=/api(?<segment>/?.*), $\{segment}
         - id: service-coupon
           uri: lb://service-coupon
           predicates:
             - Path=/api/sms/**
           filters:
-            - RewritePath=/api/sms(?<segment>/?.*), /sms$\{segment}
+            - RewritePath=/api(?<segment>/?.*), $\{segment}
         - id: service-member
           uri: lb://service-member
           predicates:
             - Path=/api/ums/**
           filters:
-            - RewritePath=/api/ums(?<segment>/?.*), /ums$\{segment}
+            - RewritePath=/api(?<segment>/?.*), $\{segment}
+        - id: third-party
+          uri: lb://third-party
+          predicates:
+            - Path=/api/thirdparty/**
+          filters:
+            - RewritePath=/api/thirdparty(?<segment>/?.*), $\{segment}
         - id: renren-fast
           uri: lb://renren-fast
           predicates:

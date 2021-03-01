@@ -1,0 +1,17 @@
+server:
+  port: 7600
+
+spring:
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+    alicloud:
+      access-key: LTAI4G4yjXus5B7Ax7RCMJSZ
+      secret-key: qZXfS1w4cHToddFepL70NVMz64x6nA
+      oss:
+        endpoint: oss-cn-beijing.aliyuncs.com
+        bucket: gulimall-muke

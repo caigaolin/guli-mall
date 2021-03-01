@@ -8,6 +8,8 @@
 
 package com.muke.common.exception;
 
+import com.muke.common.enums.CustomizeExceptionEnum;
+
 /**
  * 自定义异常
  *
@@ -39,6 +41,11 @@ public class RRException extends RuntimeException {
 		super(msg, e);
 		this.msg = msg;
 		this.code = code;
+	}
+
+	public RRException(CustomizeExceptionEnum exceptionEnum) {
+		this.msg = exceptionEnum.getMsg();
+		this.code = exceptionEnum.getCode();
 	}
 
 	public String getMsg() {

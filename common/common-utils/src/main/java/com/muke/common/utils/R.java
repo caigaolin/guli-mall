@@ -8,6 +8,7 @@
 
 package com.muke.common.utils;
 
+import com.muke.common.enums.CustomizeExceptionEnum;
 import org.apache.http.HttpStatus;
 
 import java.util.HashMap;
@@ -38,6 +39,13 @@ public class R extends HashMap<String, Object> {
 		R r = new R();
 		r.put("code", code);
 		r.put("msg", msg);
+		return r;
+	}
+
+	public static R error(CustomizeExceptionEnum exceptionEnum) {
+		R r = new R();
+		r.put("code", exceptionEnum.getCode());
+		r.put("msg", exceptionEnum.getMsg());
 		return r;
 	}
 

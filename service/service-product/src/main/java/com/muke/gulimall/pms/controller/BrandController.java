@@ -3,7 +3,10 @@ package com.muke.gulimall.pms.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.muke.common.valid.AddGroup;
+import com.muke.common.valid.UpdateGroup;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,7 +61,7 @@ public class BrandController {
      */
     @RequestMapping("/save")
     //@RequiresPermissions("pms:brand:save")
-    public R save(@RequestBody BrandEntity brand){
+    public R save(@Validated({AddGroup.class}) @RequestBody BrandEntity brand){
 		brandService.save(brand);
 
         return R.ok();
@@ -69,7 +72,7 @@ public class BrandController {
      */
     @RequestMapping("/update")
     //@RequiresPermissions("pms:brand:update")
-    public R update(@RequestBody BrandEntity brand){
+    public R update(@Validated({UpdateGroup.class}) @RequestBody BrandEntity brand){
 		brandService.updateById(brand);
 
         return R.ok();
