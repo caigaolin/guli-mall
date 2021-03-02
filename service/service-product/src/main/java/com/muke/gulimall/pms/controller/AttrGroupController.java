@@ -31,6 +31,17 @@ public class AttrGroupController {
     private AttrGroupService attrGroupService;
 
     /**
+     * 分页条件查询
+     */
+    @RequestMapping("/list/{categoryId}")
+    //@RequiresPermissions("pms:attrgroup:list")
+    public R list(@RequestParam Map<String, Object> params, @PathVariable("categoryId") Long catId){
+        PageUtils page = attrGroupService.pageQueryList(params, catId);
+
+        return R.ok().put("page", page);
+    }
+
+    /**
      * 列表
      */
     @RequestMapping("/list")
@@ -49,7 +60,8 @@ public class AttrGroupController {
     //@RequiresPermissions("pms:attrgroup:info")
     public R info(@PathVariable("attrGroupId") Long attrGroupId){
 		AttrGroupEntity attrGroup = attrGroupService.getById(attrGroupId);
-
+        Long[] catelogIds = attrGroupService.getCompleteCateId(attrGroup.getCatelogId());
+        attrGroup.setCatelogIds(catelogIds);
         return R.ok().put("attrGroup", attrGroup);
     }
 

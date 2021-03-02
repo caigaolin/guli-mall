@@ -1,8 +1,10 @@
 package com.muke.gulimall.pms.help;
 
 import com.muke.gulimall.pms.entity.CategoryEntity;
+import com.muke.gulimall.pms.service.CategoryService;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,6 +16,9 @@ import java.util.stream.Collectors;
  */
 @Component
 public class CategoryHelp {
+
+    @Resource
+    private CategoryService categoryService;
 
     /**
      * 封装分类为树形结构
@@ -29,5 +34,19 @@ public class CategoryHelp {
                 })
                 .sorted(Comparator.comparingInt(cate -> (cate.getSort() == null ? 0 : cate.getSort())))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 递归：查询完整的分类id
+     * @param attrGroupId 下层分类id
+     */
+    public void getCompleteCateId(Long attrGroupId, List<Long> longs) {
+        // 将本次的分类id加入集合中
+        longs.add(attrGroupId);
+        CategoryEntity categoryEntity = categoryService.getById(attrGroupId);
+        if (categoryEntity.getParentCid() != 0) {
+            // 说明该分类存在父级分类，则递归查找
+            getCompleteCateId(categoryEntity.getParentCid(), longs);
+        }
     }
 }

@@ -11,8 +11,8 @@ public enum  CustomizeExceptionEnum {
     /**
      * 10:表示系统相关异常
      */
-    ENTITY_VALID_EX(10001, "实体校验异常");
-
+    ENTITY_VALID_EX(10001, "实体校验异常"),
+    NOT_FOUND_DATA(10002, "数据未查询到");
     /**
      * 11：表示商品服务异常
      */
