@@ -81,7 +81,7 @@ public class CategoryController {
     @PutMapping("/update")
     //@RequiresPermissions("pms:category:update")
     public R update(@RequestBody CategoryEntity category){
-		categoryService.updateById(category);
+		categoryService.updateCateRelation(category);
 
         return R.ok();
     }

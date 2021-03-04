@@ -29,5 +29,7 @@ public interface CategoryService extends IService<CategoryEntity> {
      * @param catIds 分类id数组
      */
     void deleteBatchCate(Long[] catIds);
+
+    void updateCateRelation(CategoryEntity category);
 }
 

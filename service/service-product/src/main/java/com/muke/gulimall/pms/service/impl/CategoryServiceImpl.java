@@ -1,6 +1,7 @@
 package com.muke.gulimall.pms.service.impl;
 
 import com.muke.gulimall.pms.help.CategoryHelp;
+import com.muke.gulimall.pms.service.CategoryBrandRelationService;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -18,6 +19,8 @@ import com.muke.common.utils.Query;
 import com.muke.gulimall.pms.dao.CategoryDao;
 import com.muke.gulimall.pms.entity.CategoryEntity;
 import com.muke.gulimall.pms.service.CategoryService;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 
@@ -27,6 +30,9 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
 
     @Resource
     private CategoryHelp categoryHelp;
+
+    @Resource
+    private CategoryBrandRelationService categoryBrandRelationService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -66,5 +72,20 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
 
         // 删除分类
         baseMapper.deleteBatchIds(Arrays.asList(catIds));
+    }
+
+    /**
+     * 修改分类关联数据
+     * @param category 分类实体
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void updateCateRelation(CategoryEntity category) {
+        baseMapper.updateById(category);
+
+        if (!StringUtils.isEmpty(category.getName())) {
+            // 修改关联数据
+            categoryBrandRelationService.updateCateRelationData(category.getCatId(), category.getName());
+        }
     }
 }

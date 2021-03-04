@@ -38,12 +38,12 @@ public class CategoryHelp {
 
     /**
      * 递归：查询完整的分类id
-     * @param attrGroupId 下层分类id
+     * @param catId 下层分类id
      */
-    public void getCompleteCateId(Long attrGroupId, List<Long> longs) {
+    public void getCompleteCateId(Long catId, List<Long> longs) {
         // 将本次的分类id加入集合中
-        longs.add(attrGroupId);
-        CategoryEntity categoryEntity = categoryService.getById(attrGroupId);
+        longs.add(catId);
+        CategoryEntity categoryEntity = categoryService.getById(catId);
         if (categoryEntity.getParentCid() != 0) {
             // 说明该分类存在父级分类，则递归查找
             getCompleteCateId(categoryEntity.getParentCid(), longs);

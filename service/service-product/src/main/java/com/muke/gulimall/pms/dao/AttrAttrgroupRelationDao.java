@@ -2,7 +2,11 @@ package com.muke.gulimall.pms.dao;
 
 import com.muke.gulimall.pms.entity.AttrAttrgroupRelationEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.muke.gulimall.pms.vo.AttrGroupVo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 属性&属性分组关联
@@ -13,5 +17,6 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface AttrAttrgroupRelationDao extends BaseMapper<AttrAttrgroupRelationEntity> {
-	
+
+    void deleteBatchAttrgroup(@Param("vos") List<AttrGroupVo> deleteVos);
 }
