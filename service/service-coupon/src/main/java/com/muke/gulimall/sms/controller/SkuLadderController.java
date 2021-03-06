@@ -1,14 +1,11 @@
 package com.muke.gulimall.sms.controller;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.muke.gulimall.sms.entity.SkuLadderEntity;
 import com.muke.gulimall.sms.service.SkuLadderService;
@@ -56,11 +53,12 @@ public class SkuLadderController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
     //@RequiresPermissions("sms:skuladder:save")
     public R save(@RequestBody SkuLadderEntity skuLadder){
-		skuLadderService.save(skuLadder);
-
+        if (skuLadder.getFullCount() != 0 || skuLadder.getDiscount().compareTo(new BigDecimal(0)) != 0) {
+            skuLadderService.save(skuLadder);
+        }
         return R.ok();
     }
 

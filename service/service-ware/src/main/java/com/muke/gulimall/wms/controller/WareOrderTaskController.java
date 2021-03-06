@@ -25,7 +25,7 @@ import com.muke.common.utils.R;
  * @date 2021-02-26 12:15:39
  */
 @RestController
-@RequestMapping("wms/wareordertask")
+@RequestMapping("ware/wareordertask")
 public class WareOrderTaskController {
     @Autowired
     private WareOrderTaskService wareOrderTaskService;

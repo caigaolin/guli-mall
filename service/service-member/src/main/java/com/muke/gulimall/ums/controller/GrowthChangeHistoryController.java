@@ -25,7 +25,7 @@ import com.muke.common.utils.R;
  * @date 2021-02-26 12:20:08
  */
 @RestController
-@RequestMapping("ums/growthchangehistory")
+@RequestMapping("member/growthchangehistory")
 public class GrowthChangeHistoryController {
     @Autowired
     private GrowthChangeHistoryService growthChangeHistoryService;

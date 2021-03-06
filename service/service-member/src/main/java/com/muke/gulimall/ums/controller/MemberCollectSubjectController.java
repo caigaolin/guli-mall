@@ -25,7 +25,7 @@ import com.muke.common.utils.R;
  * @date 2021-02-26 12:20:08
  */
 @RestController
-@RequestMapping("ums/membercollectsubject")
+@RequestMapping("member/membercollectsubject")
 public class MemberCollectSubjectController {
     @Autowired
     private MemberCollectSubjectService memberCollectSubjectService;

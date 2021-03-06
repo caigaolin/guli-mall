@@ -3,14 +3,14 @@ package com.muke.gulimall.pms.controller;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.muke.gulimall.pms.entity.BrandEntity;
+import com.muke.gulimall.pms.vo.BrandRepsVo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.muke.gulimall.pms.entity.CategoryBrandRelationEntity;
 import com.muke.gulimall.pms.service.CategoryBrandRelationService;
@@ -31,6 +31,18 @@ import com.muke.common.utils.R;
 public class CategoryBrandRelationController {
     @Autowired
     private CategoryBrandRelationService categoryBrandRelationService;
+
+    /**
+     * 获取分类关联的品牌
+     * @param catId 分类id
+     * @return R
+     */
+    @GetMapping("/brands/list")
+    public R getCategoryRelationBrands(@RequestParam("catId") Long catId) {
+        List<BrandRepsVo> brandEntities = categoryBrandRelationService.getCategoryRelationBrands(catId);
+
+        return R.ok().put("data", brandEntities);
+    }
 
     /**
      * 列表

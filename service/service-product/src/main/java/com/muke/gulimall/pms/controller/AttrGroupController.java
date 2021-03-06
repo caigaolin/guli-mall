@@ -9,6 +9,7 @@ import com.muke.gulimall.pms.service.AttrAttrgroupRelationService;
 import com.muke.gulimall.pms.service.AttrGroupService;
 import com.muke.gulimall.pms.service.AttrService;
 import com.muke.gulimall.pms.vo.AttrGroupVo;
+import com.muke.gulimall.pms.vo.AttrGroupWithAttrVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +38,20 @@ public class AttrGroupController {
 
     @Resource(name = "attrAttrgroupRelationService")
     private AttrAttrgroupRelationService relationService;
+
+    ///product/attrgroup/{catelogId}/withattr
+
+    /**
+     * 获取分类下所有分组&关联属性
+     * @param catId 分类id
+     * @return R
+     */
+    @GetMapping("/{catelogId}/withattr")
+    public R getAttrGroupRelationWithAttr(@PathVariable("catelogId") Long catId) {
+        List<AttrGroupWithAttrVo> attrVos = attrGroupService.getCategoryAttrGroupWithAttr(catId);
+
+        return R.ok().put("data", attrVos);
+    }
 
     /**
      * 保存属性分组关联关系

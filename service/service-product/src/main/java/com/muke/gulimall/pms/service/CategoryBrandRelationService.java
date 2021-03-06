@@ -2,8 +2,11 @@ package com.muke.gulimall.pms.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.muke.common.utils.PageUtils;
+import com.muke.gulimall.pms.entity.BrandEntity;
 import com.muke.gulimall.pms.entity.CategoryBrandRelationEntity;
+import com.muke.gulimall.pms.vo.BrandRepsVo;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,5 +25,7 @@ public interface CategoryBrandRelationService extends IService<CategoryBrandRela
     void updateRelationData(Long brandId, String name);
 
     void updateCateRelationData(Long catId, String name);
+
+    List<BrandRepsVo> getCategoryRelationBrands(Long catId);
 }
 

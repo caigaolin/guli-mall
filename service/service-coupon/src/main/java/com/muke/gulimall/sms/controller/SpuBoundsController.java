@@ -1,14 +1,11 @@
 package com.muke.gulimall.sms.controller;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.muke.gulimall.sms.entity.SpuBoundsEntity;
 import com.muke.gulimall.sms.service.SpuBoundsService;
@@ -56,11 +53,13 @@ public class SpuBoundsController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
     //@RequiresPermissions("sms:spubounds:save")
     public R save(@RequestBody SpuBoundsEntity spuBounds){
-		spuBoundsService.save(spuBounds);
-
+        if (spuBounds.getBuyBounds().compareTo(new BigDecimal(0)) != 0 ||
+                spuBounds.getGrowBounds().compareTo(new BigDecimal(0)) != 0) {
+            spuBoundsService.save(spuBounds);
+        }
         return R.ok();
     }
 

@@ -23,7 +23,7 @@ import javax.annotation.Resource;
  * @date 2021-02-26 12:20:08
  */
 @RestController
-@RequestMapping("ums/member")
+@RequestMapping("member/member")
 public class MemberController {
     @Autowired
     private MemberService memberService;

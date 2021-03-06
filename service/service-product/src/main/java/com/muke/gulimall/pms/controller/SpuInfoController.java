@@ -3,12 +3,9 @@ package com.muke.gulimall.pms.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.muke.gulimall.pms.vo.spusave.SpuSaveVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.muke.gulimall.pms.entity.SpuInfoEntity;
 import com.muke.gulimall.pms.service.SpuInfoService;
@@ -36,7 +33,7 @@ public class SpuInfoController {
     @RequestMapping("/list")
     //@RequiresPermissions("pms:spuinfo:list")
     public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = spuInfoService.queryPage(params);
+        PageUtils page = spuInfoService.queryPageByCondition(params);
 
         return R.ok().put("page", page);
     }
@@ -54,12 +51,11 @@ public class SpuInfoController {
     }
 
     /**
-     * 保存
+     * 保存 ==> 新增商品
      */
-    @RequestMapping("/save")
-    //@RequiresPermissions("pms:spuinfo:save")
-    public R save(@RequestBody SpuInfoEntity spuInfo){
-		spuInfoService.save(spuInfo);
+    @PostMapping("/save")
+    public R save(@RequestBody SpuSaveVo spuInfo){
+		spuInfoService.saveSpuGoods(spuInfo);
 
         return R.ok();
     }

@@ -17,36 +17,42 @@ spring:
             - Path=/api/pms/**
           filters:
             - RewritePath=/api(?<segment>/?.*), $\{segment}
+
         - id: service-ware
           uri: lb://service-ware
           predicates:
-            - Path=/api/wms/**
+            - Path=/api/ware/**
           filters:
             - RewritePath=/api(?<segment>/?.*), $\{segment}
+
         - id: service-order
           uri: lb://service-order
           predicates:
             - Path=/api/oms/**
           filters:
             - RewritePath=/api(?<segment>/?.*), $\{segment}
+
         - id: service-coupon
           uri: lb://service-coupon
           predicates:
             - Path=/api/sms/**
           filters:
             - RewritePath=/api(?<segment>/?.*), $\{segment}
+
         - id: service-member
           uri: lb://service-member
           predicates:
-            - Path=/api/ums/**
+            - Path=/api/member/**
           filters:
             - RewritePath=/api(?<segment>/?.*), $\{segment}
+
         - id: third-party
           uri: lb://third-party
           predicates:
             - Path=/api/thirdparty/**
           filters:
             - RewritePath=/api/thirdparty(?<segment>/?.*), $\{segment}
+
         - id: renren-fast
           uri: lb://renren-fast
           predicates:

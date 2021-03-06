@@ -3,7 +3,9 @@ package com.muke.gulimall.pms.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.muke.common.utils.PageUtils;
 import com.muke.gulimall.pms.entity.AttrGroupEntity;
+import com.muke.gulimall.pms.vo.AttrGroupWithAttrVo;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,5 +22,7 @@ public interface AttrGroupService extends IService<AttrGroupEntity> {
     PageUtils pageQueryList(Map<String, Object> params, Long catId);
 
     Long[] getCompleteCateId(Long attrGroupId);
+
+    List<AttrGroupWithAttrVo> getCategoryAttrGroupWithAttr(Long catId);
 }
 

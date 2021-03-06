@@ -6,11 +6,18 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.muke.common.utils.PageUtils;
 import com.muke.common.utils.Query;
 import com.muke.gulimall.pms.dao.AttrGroupDao;
+import com.muke.gulimall.pms.entity.AttrAttrgroupRelationEntity;
+import com.muke.gulimall.pms.entity.AttrEntity;
 import com.muke.gulimall.pms.entity.AttrGroupEntity;
 import com.muke.gulimall.pms.help.CategoryHelp;
+import com.muke.gulimall.pms.service.AttrAttrgroupRelationService;
 import com.muke.gulimall.pms.service.AttrGroupService;
+import com.muke.gulimall.pms.service.AttrService;
+import com.muke.gulimall.pms.vo.AttrGroupWithAttrVo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -18,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service("attrGroupService")
@@ -25,6 +33,12 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
 
     @Resource
     private CategoryHelp categoryHelp;
+
+    @Resource(name = "attrAttrgroupRelationService")
+    private AttrAttrgroupRelationService relationService;
+
+    @Resource
+    private AttrService attrService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -73,6 +87,35 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
         // 对集合进行反转
         Collections.reverse(longs);
         return longs.toArray(new Long[longs.size()]);
+    }
+
+    /**
+     * 获取分类下的所有分组及关联属性
+     * @param catId 分类id
+     * @return List<AttrGroupWithAttrVo>
+     */
+    @Override
+    public List<AttrGroupWithAttrVo> getCategoryAttrGroupWithAttr(Long catId) {
+        // 获取分类下的所有分组
+        List<AttrGroupEntity> groupEntityList = baseMapper.selectList(new QueryWrapper<AttrGroupEntity>().eq("catelog_id", catId));
+        return groupEntityList.stream().map(group -> {
+            // 构建最终返回对象
+            AttrGroupWithAttrVo withAttrVo = new AttrGroupWithAttrVo();
+
+            List<AttrAttrgroupRelationEntity> relationEntities = relationService.list(new QueryWrapper<AttrAttrgroupRelationEntity>().select("attr_id").eq("attr_group_id", group.getAttrGroupId()));
+            // 得到所有属性id集合
+            List<Long> attrIds = relationEntities.stream().map(AttrAttrgroupRelationEntity::getAttrId).collect(Collectors.toList());
+            // 将属性集合默认设置为空
+            withAttrVo.setAttrs(new ArrayList<>());
+            // 判断属性id集合是否为空
+            if (!CollectionUtils.isEmpty(attrIds)) {
+                // 得到所有属性
+                List<AttrEntity> attrEntityList = attrService.listByIds(attrIds);
+                withAttrVo.setAttrs(attrEntityList);
+            }
+            BeanUtils.copyProperties(group, withAttrVo);
+            return withAttrVo;
+        }).collect(Collectors.toList());
     }
 
 }

@@ -12,7 +12,7 @@ public enum  CustomizeExceptionEnum {
      * 10:表示系统相关异常
      */
     ENTITY_VALID_EX(10001, "实体校验异常"),
-    NOT_FOUND_DATA(10002, "数据未查询到");
+    NOT_FOUND_DATA(10002, "数据未查询到"),
     /**
      * 11：表示商品服务异常
      */
@@ -21,6 +21,14 @@ public enum  CustomizeExceptionEnum {
     /**
      * 12：表示订单服务异常
      */
+
+    /**
+     * 13：表示优惠服务异常
+     */
+    SAVE_BOUNDS_FAIL(13001, "保存spu优惠价格信息失败"),
+    SAVE_LADDER_FAIL(13002, "保存sku阶梯价格失败"),
+    SAVE_FULL_REDUCTION_FAIL(13003, "保存sku满减信息失败"),
+    SAVE_MEMBER_PRICE_FAIL(13004, "保存sku会员价信息失败");
 
     private final Integer code;
     private final String msg;

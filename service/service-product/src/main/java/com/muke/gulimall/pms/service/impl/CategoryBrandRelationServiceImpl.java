@@ -4,8 +4,14 @@ import com.muke.gulimall.pms.entity.BrandEntity;
 import com.muke.gulimall.pms.entity.CategoryEntity;
 import com.muke.gulimall.pms.service.BrandService;
 import com.muke.gulimall.pms.service.CategoryService;
+import com.muke.gulimall.pms.vo.BrandRepsVo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -79,5 +85,21 @@ public class CategoryBrandRelationServiceImpl extends ServiceImpl<CategoryBrandR
         entity.setCatelogId(catId);
         entity.setCatelogName(name);
         baseMapper.update(entity, new QueryWrapper<CategoryBrandRelationEntity>().eq("catelog_id", catId));
+    }
+
+    /**
+     * 通过分类获取品牌
+     * @param catId 分类id
+     * @return List<BrandEntity>
+     */
+    @Override
+    public List<BrandRepsVo> getCategoryRelationBrands(Long catId) {
+        List<CategoryBrandRelationEntity> relationEntities = baseMapper.selectList(new QueryWrapper<CategoryBrandRelationEntity>().eq("catelog_id", catId));
+        return relationEntities.stream().map(item -> {
+            BrandRepsVo brandRepsVo = new BrandRepsVo();
+            BeanUtils.copyProperties(item, brandRepsVo);
+            return brandRepsVo;
+        }).collect(Collectors.toList());
+
     }
 }
