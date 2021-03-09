@@ -1,14 +1,14 @@
 package com.muke.gulimall.wms.controller;
 
 import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
+import com.muke.gulimall.wms.vo.PurchaseDoneVo;
+import com.muke.gulimall.wms.vo.PurchaseMergeVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.muke.gulimall.wms.entity.PurchaseEntity;
 import com.muke.gulimall.wms.service.PurchaseService;
@@ -31,12 +31,56 @@ public class PurchaseController {
     private PurchaseService purchaseService;
 
     /**
+     * 完成采购
+     * @param doneVo 采购完成实体
+     * @return R
+     */
+    @PostMapping("/done")
+    public R donePurchase(@RequestBody PurchaseDoneVo doneVo) {
+        purchaseService.donePurchase(doneVo);
+        return R.ok();
+    }
+
+
+    /**
+     * 领取采购单
+     * @param purchaseIds 采购单id
+     * @return R
+     */
+    @PostMapping("/received")
+    public R receivedPurchase(@RequestBody List<Long> purchaseIds) {
+        purchaseService.receivedPurchase(purchaseIds);
+        return R.ok();
+    }
+
+    /**
+     * 合并采购需求
+     * @param mergeVo 合并实体
+     * @return R
+     */
+    @PostMapping("/merge")
+    public R merge(@RequestBody PurchaseMergeVo mergeVo) {
+        purchaseService.mergePurchase(mergeVo);
+        return R.ok();
+    }
+
+    /**
+     * 查询未领取的采购单信息
+     * @return R
+     */
+    @GetMapping("/unreceive/list")
+    public R getUnReceivePurchase() {
+        List<PurchaseEntity> purchases = purchaseService.getUnReceivePurchase();
+        return R.ok().put("data", purchases);
+    }
+
+    /**
      * 列表
      */
     @RequestMapping("/list")
     //@RequiresPermissions("wms:purchase:list")
     public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = purchaseService.queryPage(params);
+        PageUtils page = purchaseService.queryPageCondition(params);
 
         return R.ok().put("page", page);
     }
@@ -59,6 +103,8 @@ public class PurchaseController {
     @RequestMapping("/save")
     //@RequiresPermissions("wms:purchase:save")
     public R save(@RequestBody PurchaseEntity purchase){
+        purchase.setCreateTime(new Date());
+        purchase.setUpdateTime(new Date());
 		purchaseService.save(purchase);
 
         return R.ok();

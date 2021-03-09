@@ -1,15 +1,12 @@
 package com.muke.gulimall.pms.service.impl;
 
 import com.muke.common.constant.ProductConstant;
-import com.muke.gulimall.pms.entity.AttrAttrgroupRelationEntity;
-import com.muke.gulimall.pms.entity.AttrGroupEntity;
-import com.muke.gulimall.pms.entity.CategoryEntity;
+import com.muke.gulimall.pms.entity.*;
 import com.muke.gulimall.pms.help.CategoryHelp;
-import com.muke.gulimall.pms.service.AttrAttrgroupRelationService;
-import com.muke.gulimall.pms.service.AttrGroupService;
-import com.muke.gulimall.pms.service.CategoryService;
+import com.muke.gulimall.pms.service.*;
 import com.muke.gulimall.pms.vo.AttrRespVo;
 import com.muke.gulimall.pms.vo.AttrVo;
+import com.muke.gulimall.pms.vo.SpuBaseAttrVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +23,6 @@ import com.muke.common.utils.PageUtils;
 import com.muke.common.utils.Query;
 
 import com.muke.gulimall.pms.dao.AttrDao;
-import com.muke.gulimall.pms.entity.AttrEntity;
-import com.muke.gulimall.pms.service.AttrService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -48,6 +43,9 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
 
     @Resource
     private CategoryHelp categoryHelp;
+
+    @Resource(name = "productAttrValueService")
+    private ProductAttrValueService attrValueService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -266,5 +264,38 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         IPage<AttrEntity> page = this.page(new Query<AttrEntity>().getPage(params), wrapper);
 
         return  new PageUtils(page);
+    }
+
+    /**
+     * 查询spu规则参数
+     * @param spuId
+     * @return List<ProductAttrValueEntity>
+     */
+    @Override
+    public List<ProductAttrValueEntity> listBaseAttr(Long spuId) {
+        return attrValueService.list(new QueryWrapper<ProductAttrValueEntity>().eq("spu_id", spuId));
+    }
+
+    /**
+     * 修改spu规格参数
+     * @param spuId
+     * @param baseAttrVos
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void updateSpuBaseAttr(Long spuId, List<SpuBaseAttrVo> baseAttrVos) {
+        // 删除spu原有的规格参数
+        attrValueService.remove(new QueryWrapper<ProductAttrValueEntity>().eq("spu_id", spuId));
+
+        // 添加新的规格参数
+        List<ProductAttrValueEntity> valueEntityList = baseAttrVos.stream().map(item -> {
+            ProductAttrValueEntity valueEntity = new ProductAttrValueEntity();
+            valueEntity.setSpuId(spuId);
+            BeanUtils.copyProperties(item, valueEntity);
+            valueEntity.setAttrSort(0);
+            return valueEntity;
+        }).collect(Collectors.toList());
+        attrValueService.saveBatch(valueEntityList);
+
     }
 }

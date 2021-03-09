@@ -11,6 +11,7 @@ import com.muke.common.utils.Query;
 import com.muke.gulimall.wms.dao.WareOrderTaskDao;
 import com.muke.gulimall.wms.entity.WareOrderTaskEntity;
 import com.muke.gulimall.wms.service.WareOrderTaskService;
+import org.springframework.util.StringUtils;
 
 
 @Service("wareOrderTaskService")
@@ -18,11 +19,17 @@ public class WareOrderTaskServiceImpl extends ServiceImpl<WareOrderTaskDao, Ware
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
+        QueryWrapper<WareOrderTaskEntity> queryWrapper = new QueryWrapper<>();
+        String key = (String) params.get("key");
+        if (!StringUtils.isEmpty(key)) {
+            queryWrapper.and(wrapper -> {
+               wrapper.eq("id", key).or().like("order_id", key).like("consignee", key);
+            });
+        }
         IPage<WareOrderTaskEntity> page = this.page(
                 new Query<WareOrderTaskEntity>().getPage(params),
-                new QueryWrapper<WareOrderTaskEntity>()
+                queryWrapper
         );
-
         return new PageUtils(page);
     }
 

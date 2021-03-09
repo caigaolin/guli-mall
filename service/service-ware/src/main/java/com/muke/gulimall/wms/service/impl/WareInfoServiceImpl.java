@@ -11,6 +11,7 @@ import com.muke.common.utils.Query;
 import com.muke.gulimall.wms.dao.WareInfoDao;
 import com.muke.gulimall.wms.entity.WareInfoEntity;
 import com.muke.gulimall.wms.service.WareInfoService;
+import org.springframework.util.StringUtils;
 
 
 @Service("wareInfoService")
@@ -18,9 +19,16 @@ public class WareInfoServiceImpl extends ServiceImpl<WareInfoDao, WareInfoEntity
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
+        QueryWrapper<WareInfoEntity> wrapper = new QueryWrapper<>();
+        String key = (String) params.get("key");
+        if (!StringUtils.isEmpty(key)) {
+            wrapper.and(w -> {
+                w.eq("id", key).or().like("name", key).or().like("address", key);
+            });
+        }
         IPage<WareInfoEntity> page = this.page(
                 new Query<WareInfoEntity>().getPage(params),
-                new QueryWrapper<WareInfoEntity>()
+                wrapper
         );
 
         return new PageUtils(page);

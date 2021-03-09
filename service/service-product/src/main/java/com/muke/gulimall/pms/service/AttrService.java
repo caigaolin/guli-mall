@@ -3,8 +3,10 @@ package com.muke.gulimall.pms.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.muke.common.utils.PageUtils;
 import com.muke.gulimall.pms.entity.AttrEntity;
+import com.muke.gulimall.pms.entity.ProductAttrValueEntity;
 import com.muke.gulimall.pms.vo.AttrRespVo;
 import com.muke.gulimall.pms.vo.AttrVo;
+import com.muke.gulimall.pms.vo.SpuBaseAttrVo;
 
 import java.util.List;
 import java.util.Map;
@@ -31,5 +33,9 @@ public interface AttrService extends IService<AttrEntity> {
     List<AttrEntity> queryPageAttrgroupRelationAttr(Long groupId);
 
     PageUtils getAttrgroupNoAttrRelation(Map<String, Object> params, Long groupId);
+
+    List<ProductAttrValueEntity> listBaseAttr(Long spuId);
+
+    void updateSpuBaseAttr(Long spuId, List<SpuBaseAttrVo> baseAttrVos);
 }
 

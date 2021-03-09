@@ -1,7 +1,7 @@
 package com.muke.gulimall.sms.dao;
 
-import com.muke.gulimall.sms.entity.SeckillSkuNoticeEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.muke.gulimall.sms.entity.SeckillSkuNoticeEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

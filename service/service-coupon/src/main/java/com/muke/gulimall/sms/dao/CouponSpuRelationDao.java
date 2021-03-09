@@ -1,7 +1,7 @@
 package com.muke.gulimall.sms.dao;
 
-import com.muke.gulimall.sms.entity.CouponSpuRelationEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.muke.gulimall.sms.entity.CouponSpuRelationEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

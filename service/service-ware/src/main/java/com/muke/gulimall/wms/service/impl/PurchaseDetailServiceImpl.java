@@ -11,6 +11,7 @@ import com.muke.common.utils.Query;
 import com.muke.gulimall.wms.dao.PurchaseDetailDao;
 import com.muke.gulimall.wms.entity.PurchaseDetailEntity;
 import com.muke.gulimall.wms.service.PurchaseDetailService;
+import org.springframework.util.StringUtils;
 
 
 @Service("purchaseDetailService")
@@ -23,6 +24,30 @@ public class PurchaseDetailServiceImpl extends ServiceImpl<PurchaseDetailDao, Pu
                 new QueryWrapper<PurchaseDetailEntity>()
         );
 
+        return new PageUtils(page);
+    }
+
+    @Override
+    public PageUtils queryPageCondition(Map<String, Object> params) {
+        QueryWrapper<PurchaseDetailEntity> queryWrapper = new QueryWrapper<>();
+        String key = (String) params.get("key");
+        if (!StringUtils.isEmpty(key)) {
+            queryWrapper.and(wrapper -> {
+               wrapper.eq("id", key).or().like("purchase_id", key).or().like("sku_id", key);
+            });
+        }
+        String status = (String) params.get("status");
+        if (!StringUtils.isEmpty(status)) {
+            queryWrapper.eq("status", status);
+        }
+        String wareId = (String) params.get("wareId");
+        if (!StringUtils.isEmpty(wareId)) {
+            queryWrapper.eq("ware_id", wareId);
+        }
+        IPage<PurchaseDetailEntity> page = this.page(
+                new Query<PurchaseDetailEntity>().getPage(params),
+                queryWrapper
+        );
         return new PageUtils(page);
     }
 

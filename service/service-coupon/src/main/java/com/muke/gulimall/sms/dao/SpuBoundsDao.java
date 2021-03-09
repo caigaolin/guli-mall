@@ -1,7 +1,7 @@
 package com.muke.gulimall.sms.dao;
 
-import com.muke.gulimall.sms.entity.SpuBoundsEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.muke.gulimall.sms.entity.SpuBoundsEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

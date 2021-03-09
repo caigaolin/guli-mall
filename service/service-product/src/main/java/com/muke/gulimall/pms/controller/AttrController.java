@@ -1,16 +1,15 @@
 package com.muke.gulimall.pms.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
+import com.muke.gulimall.pms.entity.ProductAttrValueEntity;
 import com.muke.gulimall.pms.vo.AttrRespVo;
 import com.muke.gulimall.pms.vo.AttrVo;
+import com.muke.gulimall.pms.vo.SpuBaseAttrVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.muke.gulimall.pms.entity.AttrEntity;
 import com.muke.gulimall.pms.service.AttrService;
@@ -31,6 +30,29 @@ import com.muke.common.utils.R;
 public class AttrController {
     @Autowired
     private AttrService attrService;
+
+    /**
+     * 修改spu规则参数
+     * @param spuId
+     * @param baseAttrVos 修改参数实体
+     * @return R
+     */
+    @PostMapping("/update/{spuId}")
+    public R updateSpuBaseAttr(@PathVariable("spuId") Long spuId,
+                               @RequestBody List<SpuBaseAttrVo> baseAttrVos) {
+        attrService.updateSpuBaseAttr(spuId, baseAttrVos);
+        return R.ok();
+    }
+
+    /**
+     * 获取spu规则参数
+     * @return R
+     */
+    @GetMapping("/base/listforspu/{spuId}")
+    public R getSpuBaseAttr(@PathVariable("spuId") Long spuId) {
+        List<ProductAttrValueEntity> entities = attrService.listBaseAttr(spuId);
+        return R.ok().put("data", entities);
+    }
 
     /**
      * 条件分页查询属性及关联数据

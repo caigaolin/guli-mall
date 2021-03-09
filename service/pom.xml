@@ -46,13 +46,6 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
-        <!--junit-->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>provided</scope>
-        </dependency>
         <!--热部署-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -60,7 +53,6 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
-
         <!--实体校验依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
