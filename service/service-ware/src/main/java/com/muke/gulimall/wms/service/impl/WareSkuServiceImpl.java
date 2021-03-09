@@ -1,10 +1,16 @@
 package com.muke.gulimall.wms.service.impl;
 
+import com.muke.common.to.SkuStockStatusTo;
 import com.muke.common.utils.R;
 import com.muke.gulimall.wms.feign.ProductFeign;
+import com.muke.gulimall.wms.vo.SkuStockStatusVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -95,6 +101,23 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
             // 修改
             wareSkuDao.updateStore(wareSkuEntity.getId(), skuNum);
         }
+    }
+
+    /**
+     * 检查并返回库存状态结果
+     * @param skuIds skuId集合
+     * @return List<SkuStockStatusTo>
+     */
+    @Override
+    public List<SkuStockStatusTo> selectSkuStockStatus(List<Long> skuIds) {
+        List<SkuStockStatusVo> skuStockStatusVoList = baseMapper.selectSkuStockStatus(skuIds);
+
+        return skuStockStatusVoList.stream().map(item -> {
+            SkuStockStatusTo skuStockStatusTo = new SkuStockStatusTo();
+            skuStockStatusTo.setSkuId(item.getSkuId());
+            skuStockStatusTo.setStockStatus(item.getStock() != null && item.getStock() > 0);
+            return skuStockStatusTo;
+        }).collect(Collectors.toList());
     }
 
 }

@@ -1,9 +1,11 @@
 package com.muke.gulimall.wms.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.muke.common.to.SkuStockStatusTo;
 import com.muke.common.utils.PageUtils;
 import com.muke.gulimall.wms.entity.WareSkuEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,5 +22,7 @@ public interface WareSkuService extends IService<WareSkuEntity> {
     PageUtils queryPageCondition(Map<String, Object> params);
 
     void addStore(Long skuId, Long wareId, Integer skuNum);
+
+    List<SkuStockStatusTo> selectSkuStockStatus(List<Long> skuIds);
 }
 

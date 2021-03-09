@@ -1,14 +1,12 @@
 package com.muke.gulimall.wms.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
+import com.muke.common.to.SkuStockStatusTo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.muke.gulimall.wms.entity.WareSkuEntity;
 import com.muke.gulimall.wms.service.WareSkuService;
@@ -29,6 +27,16 @@ import com.muke.common.utils.R;
 public class WareSkuController {
     @Autowired
     private WareSkuService wareSkuService;
+
+    /**
+     * 检查商品是否存在库存
+     * @param skuIds skuId集合
+     * @return List<SkuStockStatusTo>
+     */
+    @PostMapping("/stock/status")
+    public List<SkuStockStatusTo> getSkuStockStatus(@RequestBody List<Long> skuIds) {
+        return wareSkuService.selectSkuStockStatus(skuIds);
+    }
 
     /**
      * 列表

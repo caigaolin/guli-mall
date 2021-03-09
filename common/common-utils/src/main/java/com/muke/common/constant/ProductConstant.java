@@ -37,4 +37,58 @@ public class ProductConstant {
             return msg;
         }
     }
+
+    /**
+     * 属性检索状态枚举
+     */
+    public enum attrSearchStatus {
+        /**
+         * 可检索
+         */
+        CAN_INDEX(1),
+        /**
+         * 不可检索
+         */
+        NO_INDEX(0);
+
+        private final Integer code;
+
+        attrSearchStatus(Integer code) {
+            this.code = code;
+        }
+
+        public Integer getCode() {
+            return code;
+        }
+
+    }
+
+    /**
+     * 商品上架状态枚举
+     */
+    public enum productPublishStatus {
+        /**
+         * 新建
+         */
+        NEW(0),
+        /**
+         * 上架
+         */
+        UP(1),
+        /**
+         * 下架
+         */
+        DOWN(2);
+
+        private final Integer code;
+
+        productPublishStatus(Integer code) {
+            this.code = code;
+        }
+
+        public Integer getCode() {
+            return code;
+        }
+
+    }
 }

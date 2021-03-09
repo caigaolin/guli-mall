@@ -27,7 +27,16 @@ public class SpuInfoController {
     @Autowired
     private SpuInfoService spuInfoService;
 
-
+    /**
+     * 商品上架
+     * @param spuId
+     * @return R
+     */
+    @PostMapping("/{spuId}/up")
+    public R spuUp(@PathVariable("spuId") Long spuId) {
+        spuInfoService.spuUp(spuId);
+        return R.ok();
+    }
 
     /**
      * 列表

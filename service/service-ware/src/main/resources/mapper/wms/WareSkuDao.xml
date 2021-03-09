@@ -3,7 +3,7 @@
 
 <mapper namespace="com.muke.gulimall.wms.dao.WareSkuDao">
 
-	<!-- 可根据自己的需求，是否要使用 -->
+    <!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.muke.gulimall.wms.entity.WareSkuEntity" id="wareSkuMap">
         <result property="id" column="id"/>
         <result property="skuId" column="sku_id"/>
@@ -15,5 +15,11 @@
     <update id="updateStore">
         UPDATE FROM wms_ware_sku SET stock = stock + #{skuNum} WHERE id = #{id}
     </update>
+
+    <select id="selectSkuStockStatus" resultType="com.muke.gulimall.wms.vo.SkuStockStatusVo">
+        SELECT sku_id as skuId,sum(stock - stock_locked) as stock from wms_ware_sku WHERE sku_id in
+        <foreach collection="skuIds" item="skuId" separator="," open="(" close=")">#{skuId}</foreach>
+        GROUP BY sku_id
+    </select>
 
 </mapper>

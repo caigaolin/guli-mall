@@ -53,6 +53,13 @@ spring:
           filters:
             - RewritePath=/api/thirdparty(?<segment>/?.*), $\{segment}
 
+        - id: service-search
+          uri: lb://service-search
+          predicates:
+            - Path=/api/search/**
+          filters:
+            - RewritePath=/api/search(?<segment>/?.*), $\{segment}
+
         - id: renren-fast
           uri: lb://renren-fast
           predicates:
