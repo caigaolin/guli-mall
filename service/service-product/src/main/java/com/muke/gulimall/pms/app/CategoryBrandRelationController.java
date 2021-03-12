@@ -1,20 +1,15 @@
-package com.muke.gulimall.pms.controller;
+package com.muke.gulimall.pms.app;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.muke.gulimall.pms.entity.BrandEntity;
 import com.muke.gulimall.pms.vo.BrandRepsVo;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.muke.gulimall.pms.entity.CategoryBrandRelationEntity;
 import com.muke.gulimall.pms.service.CategoryBrandRelationService;
-import com.muke.common.utils.PageUtils;
 import com.muke.common.utils.R;
 
 

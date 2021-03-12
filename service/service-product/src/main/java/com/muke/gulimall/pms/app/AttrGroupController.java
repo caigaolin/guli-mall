@@ -1,4 +1,4 @@
-package com.muke.gulimall.pms.controller;
+package com.muke.gulimall.pms.app;
 
 import com.muke.common.utils.PageUtils;
 import com.muke.common.utils.R;

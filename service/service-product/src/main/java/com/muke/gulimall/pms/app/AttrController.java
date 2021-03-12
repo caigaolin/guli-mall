@@ -1,4 +1,4 @@
-package com.muke.gulimall.pms.controller;
+package com.muke.gulimall.pms.app;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,7 +11,6 @@ import com.muke.gulimall.pms.vo.SpuBaseAttrVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.muke.gulimall.pms.entity.AttrEntity;
 import com.muke.gulimall.pms.service.AttrService;
 import com.muke.common.utils.PageUtils;
 import com.muke.common.utils.R;

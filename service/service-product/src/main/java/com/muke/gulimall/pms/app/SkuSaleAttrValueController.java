@@ -1,4 +1,4 @@
-package com.muke.gulimall.pms.controller;
+package com.muke.gulimall.pms.app;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -10,33 +10,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.muke.gulimall.pms.entity.SkuImagesEntity;
-import com.muke.gulimall.pms.service.SkuImagesService;
+import com.muke.gulimall.pms.entity.SkuSaleAttrValueEntity;
+import com.muke.gulimall.pms.service.SkuSaleAttrValueService;
 import com.muke.common.utils.PageUtils;
 import com.muke.common.utils.R;
 
 
 
 /**
- * sku图片
+ * sku销售属性&值
  *
  * @author muke
  * @email mark-loy@163.com
  * @date 2021-02-26 10:43:54
  */
 @RestController
-@RequestMapping("pms/skuimages")
-public class SkuImagesController {
+@RequestMapping("pms/skusaleattrvalue")
+public class SkuSaleAttrValueController {
     @Autowired
-    private SkuImagesService skuImagesService;
+    private SkuSaleAttrValueService skuSaleAttrValueService;
 
     /**
      * 列表
      */
     @RequestMapping("/list")
-    //@RequiresPermissions("pms:skuimages:list")
+    //@RequiresPermissions("pms:skusaleattrvalue:list")
     public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = skuImagesService.queryPage(params);
+        PageUtils page = skuSaleAttrValueService.queryPage(params);
 
         return R.ok().put("page", page);
     }
@@ -46,20 +46,20 @@ public class SkuImagesController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    //@RequiresPermissions("pms:skuimages:info")
+    //@RequiresPermissions("pms:skusaleattrvalue:info")
     public R info(@PathVariable("id") Long id){
-		SkuImagesEntity skuImages = skuImagesService.getById(id);
+		SkuSaleAttrValueEntity skuSaleAttrValue = skuSaleAttrValueService.getById(id);
 
-        return R.ok().put("skuImages", skuImages);
+        return R.ok().put("skuSaleAttrValue", skuSaleAttrValue);
     }
 
     /**
      * 保存
      */
     @RequestMapping("/save")
-    //@RequiresPermissions("pms:skuimages:save")
-    public R save(@RequestBody SkuImagesEntity skuImages){
-		skuImagesService.save(skuImages);
+    //@RequiresPermissions("pms:skusaleattrvalue:save")
+    public R save(@RequestBody SkuSaleAttrValueEntity skuSaleAttrValue){
+		skuSaleAttrValueService.save(skuSaleAttrValue);
 
         return R.ok();
     }
@@ -68,9 +68,9 @@ public class SkuImagesController {
      * 修改
      */
     @RequestMapping("/update")
-    //@RequiresPermissions("pms:skuimages:update")
-    public R update(@RequestBody SkuImagesEntity skuImages){
-		skuImagesService.updateById(skuImages);
+    //@RequiresPermissions("pms:skusaleattrvalue:update")
+    public R update(@RequestBody SkuSaleAttrValueEntity skuSaleAttrValue){
+		skuSaleAttrValueService.updateById(skuSaleAttrValue);
 
         return R.ok();
     }
@@ -79,9 +79,9 @@ public class SkuImagesController {
      * 删除
      */
     @RequestMapping("/delete")
-    //@RequiresPermissions("pms:skuimages:delete")
+    //@RequiresPermissions("pms:skusaleattrvalue:delete")
     public R delete(@RequestBody Long[] ids){
-		skuImagesService.removeByIds(Arrays.asList(ids));
+		skuSaleAttrValueService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
     }

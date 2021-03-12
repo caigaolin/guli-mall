@@ -14,6 +14,22 @@ spring:
     nacos:
       discovery:
         server-addr: localhost:8848
+  # 开发时，关闭thymeleaf页面缓存
+  thymeleaf:
+    cache: false
+  redis:
+    host: 192.168.56.10
+  cache:
+    type: redis
+    redis:
+      # 超时时间 毫秒单位
+      time-to-live: 60000
+      # 设置key前缀，不设置就是缓存分区名
+      #key-prefix: CACHE_
+      # 使用key前缀
+      use-key-prefix: true
+      # 缓存null值，防止缓存穿透
+      cache-null-values: true
 
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*.xml

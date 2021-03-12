@@ -17,6 +17,7 @@
         <module>service-gateway</module>
         <module>third-party</module>
         <module>service-search</module>
+        <module>renren-fast</module>
     </modules>
 
     <dependencies>
@@ -45,6 +46,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <!--热部署-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 

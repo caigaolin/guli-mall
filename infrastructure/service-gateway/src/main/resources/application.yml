@@ -11,7 +11,7 @@ spring:
         locator:
           enabled: true
       routes:
-        - id: service-product
+        - id: service-product-api
           uri: lb://service-product
           predicates:
             - Path=/api/pms/**
@@ -66,5 +66,10 @@ spring:
             - Path=/api/**
           filters:
             - RewritePath=/api(?<segment>/?.*), /renren-fast$\{segment}
+
+        - id: service-product-web
+          uri: lb://service-product
+          predicates:
+            - Host=gulimall.com
 
 

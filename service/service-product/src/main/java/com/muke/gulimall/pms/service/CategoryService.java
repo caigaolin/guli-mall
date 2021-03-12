@@ -3,6 +3,7 @@ package com.muke.gulimall.pms.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.muke.common.utils.PageUtils;
 import com.muke.gulimall.pms.entity.CategoryEntity;
+import com.muke.gulimall.pms.vo.web.Catelog2Vo;
 
 import java.util.List;
 import java.util.Map;
@@ -31,5 +32,10 @@ public interface CategoryService extends IService<CategoryEntity> {
     void deleteBatchCate(Long[] catIds);
 
     void updateCateRelation(CategoryEntity category);
+
+    Map<String, List<Catelog2Vo>> selectCatelog2Cache();
+
+    List<CategoryEntity> selectCatelog1Level();
+
 }
 
