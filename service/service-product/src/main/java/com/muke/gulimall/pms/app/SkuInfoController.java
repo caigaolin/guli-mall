@@ -41,7 +41,6 @@ public class SkuInfoController {
         return R.ok().put("page", page);
     }
 
-
     /**
      * 信息
      */

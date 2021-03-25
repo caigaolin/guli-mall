@@ -11,6 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @version 1.0
  * @date 2021/2/26 12:21
  */
+
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients

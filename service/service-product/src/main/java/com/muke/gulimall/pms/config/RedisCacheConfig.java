@@ -1,4 +1,4 @@
-package com.muke.common.config;
+package com.muke.gulimall.pms.config;
 
 import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.context.annotation.Bean;

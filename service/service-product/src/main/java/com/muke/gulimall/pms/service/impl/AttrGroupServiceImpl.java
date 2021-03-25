@@ -14,6 +14,7 @@ import com.muke.gulimall.pms.service.AttrAttrgroupRelationService;
 import com.muke.gulimall.pms.service.AttrGroupService;
 import com.muke.gulimall.pms.service.AttrService;
 import com.muke.gulimall.pms.vo.AttrGroupWithAttrVo;
+import com.muke.gulimall.pms.vo.web.ItemSkuInfoVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -116,6 +117,11 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
             BeanUtils.copyProperties(group, withAttrVo);
             return withAttrVo;
         }).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ItemSkuInfoVo.SpuItemBaseAttr> getItemSpuBaseAttr(Long spuId, Long catalogId) {
+        return baseMapper.getItemSpuBaseAttr(spuId, catalogId);
     }
 
 }

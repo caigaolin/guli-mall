@@ -9,3 +9,9 @@ spring:
     nacos:
       discovery:
         server-addr: localhost:8848
+  thymeleaf:
+    cache: false
+  redis:
+    host: 192.168.56.10
+  session:
+    store-type: redis

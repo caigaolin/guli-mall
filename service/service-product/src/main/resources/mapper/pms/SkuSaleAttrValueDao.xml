@@ -3,7 +3,7 @@
 
 <mapper namespace="com.muke.gulimall.pms.dao.SkuSaleAttrValueDao">
 
-	<!-- 可根据自己的需求，是否要使用 -->
+    <!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.muke.gulimall.pms.entity.SkuSaleAttrValueEntity" id="skuSaleAttrValueMap">
         <result property="id" column="id"/>
         <result property="skuId" column="sku_id"/>
@@ -12,6 +12,9 @@
         <result property="attrValue" column="attr_value"/>
         <result property="attrSort" column="attr_sort"/>
     </resultMap>
+    <select id="getAttrNameAndValue" resultType="java.lang.String">
+        SELECT CONCAT(attr_name, '：', attr_value) from pms_sku_sale_attr_value WHERE sku_id = #{skuId}
+    </select>
 
 
 </mapper>

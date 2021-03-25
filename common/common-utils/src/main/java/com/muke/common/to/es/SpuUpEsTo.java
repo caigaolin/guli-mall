@@ -32,11 +32,11 @@ public class SpuUpEsTo implements Serializable {
 
     private Long hotScore;
 
-    private Long brandId;
-
     private Long catelogId;
 
     private String catelogName;
+
+    private Long brandId;
 
     private String brandName;
 

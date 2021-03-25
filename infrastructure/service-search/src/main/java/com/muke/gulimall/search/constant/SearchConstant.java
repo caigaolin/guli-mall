@@ -7,5 +7,7 @@ package com.muke.gulimall.search.constant;
  */
 public interface SearchConstant {
 
-    String ES_INDEX_NAME = "product";
+    String ES_INDEX_NAME = "gulimall_product";
+
+    Integer PAGE_SIZE = 16;
 }

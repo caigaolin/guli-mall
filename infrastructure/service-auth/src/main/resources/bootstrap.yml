@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: service-auth
+  cloud:
+    nacos:
+      config:
+        server-addr: localhost:8848

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -41,7 +42,7 @@ public class IndexController {
      * @return String
      */
     @GetMapping({"/", "index", "index.html"})
-    public String index(Model model) {
+    public String index(Model model, HttpSession httpSession) {
         // 查询一级分类
         List<CategoryEntity> categoryEntities = categoryService.selectCatelog1Level();
         model.addAttribute("categories", categoryEntities);

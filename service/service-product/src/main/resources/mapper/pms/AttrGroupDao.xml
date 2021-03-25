@@ -3,7 +3,7 @@
 
 <mapper namespace="com.muke.gulimall.pms.dao.AttrGroupDao">
 
-	<!-- 可根据自己的需求，是否要使用 -->
+    <!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.muke.gulimall.pms.entity.AttrGroupEntity" id="attrGroupMap">
         <result property="attrGroupId" column="attr_group_id"/>
         <result property="attrGroupName" column="attr_group_name"/>
@@ -12,6 +12,23 @@
         <result property="icon" column="icon"/>
         <result property="catelogId" column="catelog_id"/>
     </resultMap>
+
+    <resultMap id="itemSkuInfoVo" type="com.muke.gulimall.pms.vo.web.ItemSkuInfoVo$SpuItemBaseAttr">
+        <result column="attr_group_name" property="groupName"/>
+        <collection property="baseAttrs" ofType="com.muke.gulimall.pms.vo.web.ItemSkuInfoVo$SpuBaseAttr">
+            <result column="attr_name" property="attrName"/>
+            <result column="attr_value" property="attrValue"/>
+        </collection>
+    </resultMap>
+
+    <select id="getItemSpuBaseAttr" resultMap="itemSkuInfoVo">
+        SELECT ag.attr_group_name, pa.attr_name, pav.attr_value
+        FROM pms_attr_group as ag
+        LEFT JOIN pms_attr_attrgroup_relation as agr ON ag.attr_group_id = agr.attr_group_id
+        LEFT JOIN pms_attr as pa ON agr.attr_id = pa.attr_id
+        LEFT JOIN pms_product_attr_value as pav ON pa.attr_id = pav.attr_id
+        WHERE ag.catelog_id = #{catalogId} AND pav.spu_id = #{spuId}
+    </select>
 
 
 </mapper>

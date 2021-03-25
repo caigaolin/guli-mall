@@ -19,9 +19,11 @@ import org.elasticsearch.search.aggregations.metrics.Avg;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * 需要启动IOC容器
@@ -31,6 +33,15 @@ import java.io.IOException;
  */
 @SpringBootTest
 public class TestDemo {
+
+    @Test
+    public void test() {
+        String str = "_500";
+        String[] strings = str.split("_");
+        System.out.println(strings.length);
+        System.out.println(StringUtils.isEmpty(strings[0]));
+        System.out.println(Arrays.toString(strings));
+    }
 
     @Resource(name = "restHighLevelClient")
     private RestHighLevelClient client;

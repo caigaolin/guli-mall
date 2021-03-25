@@ -12,7 +12,6 @@ import org.springframework.context.annotation.ComponentScan;
  * @date 2021/3/1 15:11
  */
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
-@ComponentScan(basePackages = {"com.muke"})
 @EnableDiscoveryClient
 public class ThirdPartyApplication {
 

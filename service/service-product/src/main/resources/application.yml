@@ -30,6 +30,8 @@ spring:
       use-key-prefix: true
       # 缓存null值，防止缓存穿透
       cache-null-values: true
+  session:
+    store-type: redis
 
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*.xml
@@ -38,3 +40,11 @@ mybatis-plus:
       id-type: auto
 logging:
   level.com.muke.gulimall.pms.dao: debug
+
+# 线程池配置
+gulimall:
+  thread:
+    pool:
+      core-size: 20
+      max-count: 200
+      keep-alive-time: 10000

@@ -18,5 +18,22 @@
         <result property="saleCount" column="sale_count"/>
     </resultMap>
 
+    <resultMap id="skuItemSaleAttr" type="com.muke.gulimall.pms.vo.web.ItemSkuInfoVo$SkuItemSaleAttr">
+        <result column="attr_id" property="attrId"/>
+        <result column="attr_name" property="attrName"/>
+        <collection property="saleAttrs" ofType="com.muke.gulimall.pms.vo.web.ItemSkuInfoVo$SkuSaleAttr">
+            <result column="sku_id" property="skuIds"/>
+            <result column="attr_value" property="attrValues"/>
+        </collection>
+    </resultMap>
+
+    <select id="getItemSkuSaleAttr" resultMap="skuItemSaleAttr">
+        SELECT  sale.attr_id, sale.attr_name, GROUP_CONCAT(sale.sku_id) as sku_id, sale.attr_value
+        FROM pms_sku_info info
+        LEFT JOIN pms_sku_sale_attr_value sale ON sale.sku_id=info.sku_id
+        WHERE info.spu_id = #{spuId}
+        GROUP BY sale.attr_id, sale.attr_name,sale.attr_value
+    </select>
+
 
 </mapper>

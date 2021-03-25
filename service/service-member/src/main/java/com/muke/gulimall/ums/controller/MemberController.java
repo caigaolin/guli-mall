@@ -3,7 +3,12 @@ package com.muke.gulimall.ums.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.muke.common.enums.CustomizeExceptionEnum;
+import com.muke.common.vo.MemberRespVo;
 import com.muke.gulimall.ums.feign.CouponClient;
+import com.muke.gulimall.ums.vo.LoginVo;
+import com.muke.gulimall.ums.vo.RegisterVo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +35,23 @@ public class MemberController {
 
     @Resource
     private CouponClient couponClient;
+
+    @PostMapping("/login")
+    public R loginMember(@RequestBody LoginVo loginVo) {
+        MemberEntity member = memberService.loginMember(loginVo);
+        if (member == null) {
+            return R.error(CustomizeExceptionEnum.ACCOUNT_PASSWORD_ERROR);
+        }
+        MemberRespVo memberRespVo = new MemberRespVo();
+        BeanUtils.copyProperties(member, memberRespVo);
+        return R.ok().put("member", memberRespVo);
+    }
+
+    @PostMapping("/register")
+    public R registerMember(@RequestBody RegisterVo registerVo) {
+        memberService.registerMember(registerVo);
+        return R.ok();
+    }
 
     @GetMapping("/coupons")
     public R getMember() {

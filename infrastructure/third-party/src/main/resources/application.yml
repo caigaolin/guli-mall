@@ -15,3 +15,8 @@ spring:
       oss:
         endpoint: oss-cn-beijing.aliyuncs.com
         bucket: gulimall-muke
+      sms:
+        key-id: LTAI4G1Z6H6VjbfF6pSnNQkw
+        key-secret: Cld7SlJWeKFb0SqjYThduUY8whQ9Up
+        template-code: SMS_208626070
+        sign-name: 小码客博客网站

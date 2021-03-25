@@ -1,0 +1,25 @@
+server:
+  port: 7900
+
+spring:
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+  # 开发时，关闭thymeleaf页面缓存
+  thymeleaf:
+    cache: false
+  redis:
+    host: 192.168.56.10
+  session:
+    store-type: redis
+# 线程池配置
+gulimall:
+  thread:
+    pool:
+      core-size: 20
+      max-count: 200
+      keep-alive-time: 10000

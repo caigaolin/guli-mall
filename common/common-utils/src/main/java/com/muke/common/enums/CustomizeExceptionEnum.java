@@ -28,7 +28,20 @@ public enum  CustomizeExceptionEnum {
     SAVE_BOUNDS_FAIL(13001, "保存spu优惠价格信息失败"),
     SAVE_LADDER_FAIL(13002, "保存sku阶梯价格失败"),
     SAVE_FULL_REDUCTION_FAIL(13003, "保存sku满减信息失败"),
-    SAVE_MEMBER_PRICE_FAIL(13004, "保存sku会员价信息失败");
+    SAVE_MEMBER_PRICE_FAIL(13004, "保存sku会员价信息失败"),
+
+    /**
+     * 14:第三方服务异常
+     */
+    SEND_CODE_EX(14001, "发送短信验证码异常"),
+    SEND_CODE_OFTEN(14002, "请勿重复发送验证码"),
+
+    /**
+     * 15:用户服务
+     */
+    USERNAME_EXITS(15001, "用户名已存在"),
+    PHONE_EXITS(15002, "手机号已存在"),
+    ACCOUNT_PASSWORD_ERROR(15003, "账号密码错误");
 
     private final Integer code;
     private final String msg;
