@@ -76,13 +76,20 @@ spring:
           uri: lb://service-search
           predicates:
             - Host=search.gulimall.com
+
         - id: service-auth
           uri: lb://service-auth
           predicates:
             - Host=auth.gulimall.com
+
         - id: service-cart
           uri: lb://service-cart
           predicates:
             - Host=cart.gulimall.com
+
+        - id: service-order
+          uri: lb://service-order
+          predicates:
+            - Host=order.gulimall.com
 
 

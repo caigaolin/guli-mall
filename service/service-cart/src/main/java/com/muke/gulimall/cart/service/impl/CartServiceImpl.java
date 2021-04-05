@@ -18,6 +18,8 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -180,6 +182,33 @@ public class CartServiceImpl implements CartService {
     public void removeCartItem(Long skuId) {
         BoundHashOperations<String, Object, Object> userCartByRedis = getUserCartByRedis();
         userCartByRedis.delete(skuId.toString());
+    }
+
+    /**
+     * 获取购物车中已勾选的商品项
+     * @return
+     */
+    @Override
+    public List<CartItemVo> getCartItemsByKey() {
+        // 从threadLocal中获取用户信息
+        MemberInfoVo memberInfoVo = CartInterceptor.threadLocal.get();
+        if (memberInfoVo.getUserId() != null) {
+            // 用户已登录
+            String cartKey = CartConstant.USER_CART_REDIS_PREFIX + memberInfoVo.getUserId();
+            // 得到购物车中所有商品项
+            List<CartItemVo> cartItemVos = getCartItemByKey(cartKey);
+            return cartItemVos.stream().filter(CartItemVo::getChecked).peek(item -> {
+                // 远程调用商品服务，获取商品最新价格
+                R info = productFeign.info(item.getSkuId());
+                if (info.getCode().equals(0)) {
+                    String skuInfoStr = JSON.toJSONString(info.get("skuInfo"));
+                    CartSkuInfoVo skuInfoVo = JSON.parseObject(skuInfoStr, CartSkuInfoVo.class);
+                    item.setPrice(skuInfoVo.getPrice());
+                }
+            }).collect(Collectors.toList());
+        } else {
+            return null;
+        }
     }
 
     /**

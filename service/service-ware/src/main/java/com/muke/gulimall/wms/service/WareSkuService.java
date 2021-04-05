@@ -3,6 +3,7 @@ package com.muke.gulimall.wms.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.muke.common.to.SkuStockStatusTo;
 import com.muke.common.utils.PageUtils;
+import com.muke.gulimall.wms.dto.WareLockDTO;
 import com.muke.gulimall.wms.entity.WareSkuEntity;
 
 import java.util.List;
@@ -24,5 +25,7 @@ public interface WareSkuService extends IService<WareSkuEntity> {
     void addStore(Long skuId, Long wareId, Integer skuNum);
 
     List<SkuStockStatusTo> selectSkuStockStatus(List<Long> skuIds);
+
+    Boolean lockWare(List<WareLockDTO> wareLockDTO);
 }
 

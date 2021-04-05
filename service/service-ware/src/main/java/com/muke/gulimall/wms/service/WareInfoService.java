@@ -3,6 +3,7 @@ package com.muke.gulimall.wms.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.muke.common.utils.PageUtils;
 import com.muke.gulimall.wms.entity.WareInfoEntity;
+import com.muke.gulimall.wms.vo.MemberReceiveAddressRespVo;
 
 import java.util.Map;
 
@@ -16,5 +17,7 @@ import java.util.Map;
 public interface WareInfoService extends IService<WareInfoEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    MemberReceiveAddressRespVo getFare(Long addrId);
 }
 

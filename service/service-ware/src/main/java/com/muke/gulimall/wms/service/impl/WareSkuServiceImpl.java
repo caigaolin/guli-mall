@@ -2,6 +2,7 @@ package com.muke.gulimall.wms.service.impl;
 
 import com.muke.common.to.SkuStockStatusTo;
 import com.muke.common.utils.R;
+import com.muke.gulimall.wms.dto.WareLockDTO;
 import com.muke.gulimall.wms.feign.ProductFeign;
 import com.muke.gulimall.wms.vo.SkuStockStatusVo;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,8 @@ import com.muke.common.utils.Query;
 import com.muke.gulimall.wms.dao.WareSkuDao;
 import com.muke.gulimall.wms.entity.WareSkuEntity;
 import com.muke.gulimall.wms.service.WareSkuService;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -118,6 +121,45 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
             skuStockStatusTo.setStockStatus(item.getStock() != null && item.getStock() > 0);
             return skuStockStatusTo;
         }).collect(Collectors.toList());
+    }
+
+    /**
+     * 锁定库存
+     * @param wareLockDTO
+     * @return
+     */
+    @Override
+    public Boolean lockWare(List<WareLockDTO> wareLockDTO) {
+        boolean isAllLock = true;
+        if (!CollectionUtils.isEmpty(wareLockDTO)) {
+            for (WareLockDTO dto : wareLockDTO) {
+                // 获取到所有有库存的仓库id
+                List<Long> wareIds = baseMapper.selectWareIdByIsStock(dto.getSkuId());
+                if (!CollectionUtils.isEmpty(wareIds)) {
+                    boolean isLock = false;
+                    for (Long wareId : wareIds) {
+                        // 进行挨个仓库锁库存，只要有一个锁成功，就OK
+                        Long count = baseMapper.lockWare(wareId, dto.getSkuId(), dto.getNumber());
+                        // count为1表示锁库存成功，0表示失败
+                        if (count.equals(1L)) {
+                            isLock = true;
+                            break;
+                        }
+                    }
+                    // 判断当前商品是否锁成功，失败则跳出整个锁库存操作
+                    if (!isLock) {
+                        isAllLock = false;
+                        break;
+                    }
+                } else {
+                    isAllLock = false;
+                    break;
+                }
+            }
+        } else {
+            isAllLock = false;
+        }
+        return isAllLock;
     }
 
 }

@@ -43,4 +43,9 @@ public class MemberRespVo implements Serializable {
      * 头像
      */
     private String header;
+
+    /**
+     * 积分
+     */
+    private Integer integration;
 }

@@ -1,14 +1,13 @@
 package com.muke.gulimall.wms.controller;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.muke.gulimall.wms.vo.MemberReceiveAddressRespVo;
+import jdk.nashorn.internal.objects.annotations.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.muke.gulimall.wms.entity.WareInfoEntity;
 import com.muke.gulimall.wms.service.WareInfoService;
@@ -29,6 +28,17 @@ import com.muke.common.utils.R;
 public class WareInfoController {
     @Autowired
     private WareInfoService wareInfoService;
+
+    /**
+     * 查询运费信息
+     * @param addrId 收货地址id
+     * @return R
+     */
+    @GetMapping("/fare/{addrId}")
+    public R getFare(@PathVariable("addrId") Long addrId) {
+        MemberReceiveAddressRespVo memberAddress = wareInfoService.getFare(addrId);
+        return R.ok().put("data", memberAddress);
+    }
 
     /**
      * 列表

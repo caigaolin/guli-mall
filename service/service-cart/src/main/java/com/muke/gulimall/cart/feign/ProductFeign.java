@@ -21,4 +21,5 @@ public interface ProductFeign {
 
     @GetMapping("/pms/skusaleattrvalue/{skuId}")
     List<String> getAttrNameAndValue(@PathVariable("skuId") Long skuId);
+
 }

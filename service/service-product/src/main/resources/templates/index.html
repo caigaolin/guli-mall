@@ -97,12 +97,12 @@
                 <li>
                     <a href="http://auth.gulimall.com/login.html">你好，[[${session.member == null ? '请登录' : session.member.username}]]</a>
                 </li>
-                <li>
-                    <a th:if="${session.member == null}" href="http://auth.gulimall.com/register.html" class="li_2">免费注册</a>
+                <li th:if="${session.member == null}" >
+                    <a href="http://auth.gulimall.com/register.html" class="li_2">免费注册</a>
                 </li>
                 <span>|</span>
                 <li>
-                    <a href="/static/#">我的订单</a>
+                    <a href="http://order.gulimall.com/list.html">我的订单</a>
                 </li>
 
 

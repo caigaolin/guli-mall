@@ -13,7 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableFeignClients
+@EnableFeignClients(basePackages = {"com.muke.gulimall.wms.feign"})
 @ComponentScan(basePackages = {"com.muke"})
 public class WareApplication {
     public static void main(String[] args) {

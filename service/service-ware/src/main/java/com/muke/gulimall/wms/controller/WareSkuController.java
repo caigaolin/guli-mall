@@ -4,7 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import com.muke.common.enums.CustomizeExceptionEnum;
 import com.muke.common.to.SkuStockStatusTo;
+import com.muke.gulimall.wms.dto.WareLockDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +29,20 @@ import com.muke.common.utils.R;
 public class WareSkuController {
     @Autowired
     private WareSkuService wareSkuService;
+
+    /**
+     * 锁定库存
+     * @param wareLockDTOS
+     * @return
+     */
+    @PostMapping("/lock")
+    public R lockWare(@RequestBody List<WareLockDTO> wareLockDTOS) {
+        Boolean isLock = wareSkuService.lockWare(wareLockDTOS);
+        if (isLock) {
+            return R.ok().put("isLock", isLock);
+        }
+        return R.error(CustomizeExceptionEnum.LOCK_STOCK_EX);
+    }
 
     /**
      * 检查商品是否存在库存

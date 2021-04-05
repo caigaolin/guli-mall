@@ -8,9 +8,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -94,5 +96,15 @@ public class CartController {
     public String removeCartItem(@PathVariable("skuId") Long skuId) {
         cartService.removeCartItem(skuId);
         return "redirect:http://cart.gulimall.com/cartList.html";
+    }
+
+    /**
+     * 获取购物项
+     * @return
+     */
+    @GetMapping("/get/cartItems")
+    @ResponseBody
+    public List<CartItemVo> getCartItemsByKey() {
+        return cartService.getCartItemsByKey();
     }
 }

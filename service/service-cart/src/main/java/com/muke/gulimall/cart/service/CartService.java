@@ -4,6 +4,7 @@ import com.muke.gulimall.cart.vo.CartItemVo;
 import com.muke.gulimall.cart.vo.CartVo;
 import com.muke.gulimall.cart.vo.MemberInfoVo;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -30,7 +31,7 @@ public interface CartService {
     CartItemVo getCartItem(Long skuId);
 
     /**
-     * 获取购物车列表
+     * 获取购物车
      * @return
      */
     CartVo getCartList() throws ExecutionException, InterruptedException;
@@ -54,4 +55,10 @@ public interface CartService {
      * @param skuId
      */
     void removeCartItem(Long skuId);
+
+    /**
+     * 获取购物车中已勾选的商品项
+     * @return
+     */
+    List<CartItemVo> getCartItemsByKey();
 }

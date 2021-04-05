@@ -18,7 +18,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 @SpringBootApplication
 @EnableDiscoveryClient
 @ComponentScan(basePackages = {"com.muke"})
-@EnableFeignClients
+@EnableFeignClients(basePackages = {"com.muke.gulimall.pms.feign"})
 public class ProductApplication {
 
     public static void main(String[] args) {

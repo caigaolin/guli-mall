@@ -21,7 +21,8 @@ public enum  CustomizeExceptionEnum {
     /**
      * 12：表示订单服务异常
      */
-
+    SAVE_ORDER_EX(12000, "保存订单失败"),
+    SAVE_ORDER_ITEM_EX(12001, "保存订单项失败"),
     /**
      * 13：表示优惠服务异常
      */
@@ -41,7 +42,12 @@ public enum  CustomizeExceptionEnum {
      */
     USERNAME_EXITS(15001, "用户名已存在"),
     PHONE_EXITS(15002, "手机号已存在"),
-    ACCOUNT_PASSWORD_ERROR(15003, "账号密码错误");
+    ACCOUNT_PASSWORD_ERROR(15003, "账号密码错误"),
+
+    /**
+     * 16:库存服务
+     */
+    LOCK_STOCK_EX(16000, "锁定库存失败");
 
     private final Integer code;
     private final String msg;

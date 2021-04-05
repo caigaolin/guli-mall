@@ -16,10 +16,18 @@
         UPDATE FROM wms_ware_sku SET stock = stock + #{skuNum} WHERE id = #{id}
     </update>
 
+    <update id="lockWare">
+        UPDATE `wms_ware_sku` SET `stock_locked` = `stock_locked` + #{number} WHERE `sku_id` = #{skuId} AND `ware_id` = #{wareId}
+         AND `stock` - `stock_locked` > #{number}
+    </update>
+
     <select id="selectSkuStockStatus" resultType="com.muke.gulimall.wms.vo.SkuStockStatusVo">
         SELECT sku_id as skuId,sum(stock - stock_locked) as stock from wms_ware_sku WHERE sku_id in
         <foreach collection="skuIds" item="skuId" separator="," open="(" close=")">#{skuId}</foreach>
         GROUP BY sku_id
+    </select>
+    <select id="selectWareIdByIsStock" resultType="java.lang.Long">
+        SELECT `ware_id` FROM `wms_ware_sku` where `sku_id` = #{skuId} AND `stock` - `stock_locked` > 0
     </select>
 
 </mapper>

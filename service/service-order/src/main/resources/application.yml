@@ -14,9 +14,30 @@ spring:
     nacos:
       discovery:
         server-addr: localhost:8848
+  rabbitmq:
+    host: 192.168.56.10
+    virtual-host: /
+    publisher-confirm-type: correlated
+    publisher-returns: true
+    template:
+      mandatory: true
+    listener:
+      simple:
+        acknowledge-mode: manual
+  redis:
+    host: 192.168.56.10
+  session:
+    store-type: redis
 
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*.xml
   global-config:
     db-config:
       id-type: auto
+# 线程池配置
+gulimall:
+  thread:
+    pool:
+      core-size: 20
+      max-count: 200
+      keep-alive-time: 10000
