@@ -79,4 +79,30 @@ public class WareConstant {
         }
 
     }
+
+    public enum WareLockStatus {
+        /**
+         * 已锁定
+         */
+        LOCKED(1),
+        /**
+         * 已解锁
+         */
+        UN_LOCK(2),
+        /**
+         * 已扣减
+         */
+        DEDUCTION(3);
+
+
+        private final Integer code;
+
+        WareLockStatus(Integer code) {
+            this.code = code;
+        }
+
+        public Integer getCode() {
+            return code;
+        }
+    }
 }

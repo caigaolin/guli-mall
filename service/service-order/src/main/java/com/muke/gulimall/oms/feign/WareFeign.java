@@ -23,7 +23,7 @@ public interface WareFeign {
     List<SkuStockStatusTo> getSkuStockStatus(@RequestBody List<Long> skuIds);
 
     @PostMapping("/ware/waresku/lock")
-    R lockWare(@RequestBody List<WareLockDTO> wareLockDTOS);
+    R lockWare(@RequestBody WareLockDTO wareLockDTOS);
 
     @GetMapping("/ware/wareinfo/fare/{addrId}")
     R getFare(@PathVariable("addrId") Long addrId);

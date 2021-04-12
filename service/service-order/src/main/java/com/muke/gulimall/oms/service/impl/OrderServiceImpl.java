@@ -2,6 +2,7 @@ package com.muke.gulimall.oms.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.alipay.api.internal.util.AlipaySignature;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
@@ -9,10 +10,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.muke.common.enums.CustomizeExceptionEnum;
 import com.muke.common.exception.RRException;
 import com.muke.common.to.SkuStockStatusTo;
+import com.muke.common.to.mq.OrderTo;
 import com.muke.common.utils.PageUtils;
 import com.muke.common.utils.Query;
 import com.muke.common.utils.R;
 import com.muke.common.vo.MemberRespVo;
+import com.muke.gulimall.oms.config.AlipayTemplate;
 import com.muke.gulimall.oms.constant.OrderConstant;
 import com.muke.gulimall.oms.dao.OrderDao;
 import com.muke.gulimall.oms.dto.MemberReceiveAddressDTO;
@@ -23,7 +26,7 @@ import com.muke.gulimall.oms.entity.OrderEntity;
 import com.muke.gulimall.oms.entity.OrderItemEntity;
 import com.muke.gulimall.oms.enums.OrderPayEnum;
 import com.muke.gulimall.oms.enums.OrderSourceEnum;
-import com.muke.gulimall.oms.enums.OrderStatusEnum;
+import com.muke.common.enums.OrderStatusEnum;
 import com.muke.gulimall.oms.feign.CartFeign;
 import com.muke.gulimall.oms.feign.MemberFeign;
 import com.muke.gulimall.oms.feign.ProductFeign;
@@ -32,6 +35,8 @@ import com.muke.gulimall.oms.interceptor.LoginInterceptor;
 import com.muke.gulimall.oms.service.OrderItemService;
 import com.muke.gulimall.oms.service.OrderService;
 import com.muke.gulimall.oms.vo.*;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
@@ -70,6 +75,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
     private ProductFeign productFeign;
     @Resource
     private OrderItemService orderItemService;
+    @Resource
+    private RabbitTemplate rabbitTemplate;
+    @Resource
+    private AlipayTemplate alipayTemplate;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -172,17 +181,21 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
                 if (Math.abs(orderEntity.getPayAmount().subtract(orderVo.getPayPrice()).doubleValue()) < 0.01) {
                     // 验价成功,保存订单
                     saveOrder(orderCreateDTO);
+                    WareLockDTO lockDTO = new WareLockDTO();
+                    lockDTO.setOrderSn(orderCreateDTO.getOrderEntity().getOrderSn());
                     // 远程锁定库存
-                    List<WareLockDTO> lockDTOList = orderItems.stream().map(item -> {
-                        WareLockDTO lockDTO = new WareLockDTO();
-                        lockDTO.setSkuId(item.getSkuId());
-                        lockDTO.setNumber(item.getSkuQuantity());
-                        return lockDTO;
+                    List<WareLockDTO.WareInfo> wareInfoList = orderItems.stream().map(item -> {
+                        WareLockDTO.WareInfo wareInfo = new WareLockDTO.WareInfo();
+                        wareInfo.setSkuId(item.getSkuId());
+                        wareInfo.setNumber(item.getSkuQuantity());
+                        return wareInfo;
                     }).collect(Collectors.toList());
-                    R r = wareFeign.lockWare(lockDTOList);
+                    lockDTO.setWareInfoList(wareInfoList);
+                    R r = wareFeign.lockWare(lockDTO);
                     if (r.getCode().equals(0)) {
                         // 扣积分等操作
-                        int a = 10 / 0;
+                        // 发送订单生成成功消息
+                        rabbitTemplate.convertAndSend("order-event-exchange", "order.create", orderCreateDTO);
                     } else {
                         orderRespVo.setCode(1);
                         orderRespVo.setMessage("订单锁定库存失败");
@@ -201,6 +214,79 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         }
         return orderRespVo;
     }
+
+    /**
+     * 取消订单
+     * @param orderEntity
+     */
+    @Override
+    public void closedOrder(OrderEntity orderEntity) {
+        // 只有订单状态为未付款的订单才能关闭订单
+        OrderEntity entity = baseMapper.selectOne(new QueryWrapper<OrderEntity>().eq("order_sn", orderEntity.getOrderSn()).eq("status", OrderStatusEnum.WAIT_PAY.getCode()));
+        if (entity != null) {
+            // 修改订单状态
+            OrderEntity orderEntity1 = new OrderEntity();
+            orderEntity1.setId(entity.getId());
+            orderEntity1.setStatus(OrderStatusEnum.CLOSED_ORDER.getCode());
+            baseMapper.updateById(orderEntity1);
+            OrderTo orderTo = new OrderTo();
+            BeanUtils.copyProperties(entity, orderTo);
+            orderTo.setStatus(orderEntity1.getStatus());
+            // 修改订单状态成功，则发送消息，解锁库存
+            rabbitTemplate.convertAndSend("order-event-exchange", "order.closed", orderTo);
+        }
+    }
+
+    @Override
+    public PayVo getPayInfo(String orderSn) {
+        OrderEntity orderEntity = baseMapper.selectOne(new QueryWrapper<OrderEntity>().eq("order_sn", orderSn));
+        PayVo payVo = new PayVo();
+        payVo.setOutTradeNo(orderSn);
+        payVo.setBody(orderEntity.getNote());
+        // 设置价格如：12.0001  ==》 12.01
+        payVo.setTotalAmount(orderEntity.getPayAmount().setScale(2, BigDecimal.ROUND_UP).toString());
+        payVo.setSubject(orderEntity.getMemberUsername());
+        return payVo;
+    }
+
+    @Override
+    public Map<String, Object> getOrderListPage(Map<String, Object> params) {
+        MemberRespVo respVo = LoginInterceptor.threadLocal.get();
+
+        IPage<OrderEntity> page = this.page(
+                new Query<OrderEntity>().getPage(params),
+                new QueryWrapper<OrderEntity>().eq("member_id", respVo.getId()).orderByDesc("create_time")
+        );
+
+        List<OrderCreateDTO> createDTOList = page.getRecords().stream().map(order -> {
+            List<OrderItemEntity> itemEntities = orderItemService.list(new QueryWrapper<OrderItemEntity>().eq("order_sn", order.getOrderSn()));
+            OrderCreateDTO createDTO = new OrderCreateDTO();
+            createDTO.setOrderEntity(order);
+            createDTO.setOrderItems(itemEntities);
+            return createDTO;
+        }).collect(Collectors.toList());
+
+        Map<String, Object> map = new HashMap<>(16);
+        map.put("records", createDTOList);
+        map.put("page", page.getPages());
+        map.put("size", page.getSize());
+        map.put("current", page.getCurrent());
+        map.put("total", page.getTotal());
+        return map;
+    }
+
+    /**
+     * 修改订单状态
+     * @param payAsyncVo
+     */
+    @Override
+    public void updateOrderStatus(PayAsyncVo payAsyncVo) {
+        if (payAsyncVo.getTrade_status().equals("TRADE_SUCCESS") || payAsyncVo.getTrade_status().equals("TRADE_FINISHED")) {
+            baseMapper.updateOrderStatusByOrderSn(payAsyncVo.getOut_trade_no(), OrderStatusEnum.FINISHED_ORDER.getCode());
+        }
+
+    }
+
 
     /**
      * 保存订单

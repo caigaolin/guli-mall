@@ -3,6 +3,7 @@ package com.muke.gulimall.oms.interceptor;
 import com.muke.common.vo.MemberRespVo;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,12 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        AntPathMatcher pathMatcher = new AntPathMatcher();
+        boolean match = pathMatcher.match("/oms/order/order-sn/**", request.getRequestURI());
+        boolean payed = pathMatcher.match("/payed/**", request.getRequestURI());
+        if (match || payed) {
+            return true;
+        }
         // 获取session中存放的用户信息
         MemberRespVo member = (MemberRespVo) request.getSession().getAttribute("member");
         if (member == null) {

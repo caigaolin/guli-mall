@@ -10,6 +10,8 @@ spring:
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
+  mvc:
+    date-format: yyyy-MM-dd HH:mm:ss
   cloud:
     nacos:
       discovery:
@@ -28,6 +30,7 @@ spring:
     host: 192.168.56.10
   session:
     store-type: redis
+
 
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*.xml

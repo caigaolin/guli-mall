@@ -1,4 +1,4 @@
-package com.muke.gulimall.oms.enums;
+package com.muke.common.enums;
 
 /**
  * @author 木可

@@ -3,9 +3,7 @@ package com.muke.gulimall.oms.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.muke.common.utils.PageUtils;
 import com.muke.gulimall.oms.entity.OrderEntity;
-import com.muke.gulimall.oms.vo.OrderGenerateVo;
-import com.muke.gulimall.oms.vo.OrderInfoVo;
-import com.muke.gulimall.oms.vo.OrderRespVo;
+import com.muke.gulimall.oms.vo.*;
 
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -28,5 +26,18 @@ public interface OrderService extends IService<OrderEntity> {
     OrderInfoVo tradeOrder() throws ExecutionException, InterruptedException;
 
     OrderRespVo generateOrder(OrderGenerateVo orderVo, OrderRespVo respVo);
+
+    void closedOrder(OrderEntity orderEntity);
+
+    /**
+     * 获取支付信息
+     * @param orderSn 订单号
+     * @return
+     */
+    PayVo getPayInfo(String orderSn);
+
+    Map<String, Object> getOrderListPage(Map<String, Object> params);
+
+    void updateOrderStatus(PayAsyncVo payAsyncVo);
 }
 

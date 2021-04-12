@@ -23,13 +23,6 @@ import java.util.Map;
 @Configuration
 public class RabbitMqConfig {
 
-    @RabbitListener(queues = {"order.release.queue"})
-    public void listenerMessage(OrderEntity orderEntity, Channel channel, Message message) throws IOException {
-        System.out.println("订单号：[" +orderEntity.getOrderSn()+ "]");
-        // 手动通知服务器，已接受消息
-        channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
-    }
-
     /**
      * 订单事件交换机
      * @return
@@ -48,7 +41,7 @@ public class RabbitMqConfig {
         Map<String, Object> arguments = new HashMap<>(16);
         arguments.put("x-dead-letter-exchange", "order-event-exchange");
         arguments.put("x-dead-letter-routing-key", "order.release");
-        arguments.put("x-message-ttl", 60000);
+        arguments.put("x-message-ttl", 300000);
         return new Queue("order.delay.queue", true, false, false, arguments);
     }
 
@@ -72,6 +65,15 @@ public class RabbitMqConfig {
                 Binding.DestinationType.QUEUE,
                 "order-event-exchange",
                 "order.release",
+                null);
+    }
+
+    @Bean
+    public Binding orderClosedBinding() {
+        return new Binding("ware.release.stock.queue",
+                Binding.DestinationType.QUEUE,
+                "order-event-exchange",
+                "order.closed",
                 null);
     }
 }

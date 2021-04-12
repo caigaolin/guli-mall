@@ -18,6 +18,7 @@
         <module>service-ware</module>
         <module>service-coupon</module>
         <module>service-cart</module>
+        <module>service-seckill</module>
     </modules>
 
     <dependencies>

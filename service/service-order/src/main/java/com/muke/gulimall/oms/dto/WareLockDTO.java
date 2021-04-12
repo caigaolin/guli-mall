@@ -3,6 +3,7 @@ package com.muke.gulimall.oms.dto;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author 木可
@@ -13,8 +14,15 @@ import java.io.Serializable;
 public class WareLockDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private Long skuId;
+    private String orderSn;
 
-    private Integer number;
+    private List<WareInfo> wareInfoList;
+
+    @Data
+    public static class WareInfo {
+        private Long skuId;
+
+        private Integer number;
+    }
 
 }

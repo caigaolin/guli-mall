@@ -1,5 +1,6 @@
 package com.muke.gulimall.wms;
 
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @version 1.0
  * @date 2021/2/26 12:17
  */
+@EnableRabbit
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients(basePackages = {"com.muke.gulimall.wms.feign"})

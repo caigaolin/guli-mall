@@ -36,7 +36,7 @@ public class WareSkuController {
      * @return
      */
     @PostMapping("/lock")
-    public R lockWare(@RequestBody List<WareLockDTO> wareLockDTOS) {
+    public R lockWare(@RequestBody WareLockDTO wareLockDTOS) {
         Boolean isLock = wareSkuService.lockWare(wareLockDTOS);
         if (isLock) {
             return R.ok().put("isLock", isLock);
