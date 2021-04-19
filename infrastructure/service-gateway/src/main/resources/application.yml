@@ -18,6 +18,13 @@ spring:
           filters:
             - RewritePath=/api(?<segment>/?.*), $\{segment}
 
+        - id: service-coupon-api
+          uri: lb://service-coupon
+          predicates:
+            - Path=/api/coupon/**
+          filters:
+            - RewritePath=/api(?<segment>/?.*), $\{segment}
+
         - id: service-ware
           uri: lb://service-ware
           predicates:
@@ -96,5 +103,10 @@ spring:
           uri: lb://service-member
           predicates:
             - Host=member.gulimall.com
+
+        - id: service-seckill
+          uri: lb://service-seckill
+          predicates:
+            - Host=seckill.gulimall.com
 
 

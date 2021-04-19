@@ -25,7 +25,7 @@ import com.muke.common.utils.R;
  * @date 2021-02-26 12:23:44
  */
 @RestController
-@RequestMapping("sms/seckillskurelation")
+@RequestMapping("coupon/seckillskurelation")
 public class SeckillSkuRelationController {
     @Autowired
     private SeckillSkuRelationService seckillSkuRelationService;
@@ -36,7 +36,7 @@ public class SeckillSkuRelationController {
     @RequestMapping("/list")
     //@RequiresPermissions("sms:seckillskurelation:list")
     public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = seckillSkuRelationService.queryPage(params);
+        PageUtils page = seckillSkuRelationService.getSeckillRelation(params);
 
         return R.ok().put("page", page);
     }

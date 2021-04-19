@@ -1,5 +1,6 @@
 package com.muke.gulimall.pms.vo.web;
 
+import com.muke.gulimall.pms.dto.SeckillSkuRedisDTO;
 import com.muke.gulimall.pms.entity.SkuImagesEntity;
 import com.muke.gulimall.pms.entity.SkuInfoEntity;
 import com.muke.gulimall.pms.entity.SpuInfoDescEntity;
@@ -43,6 +44,11 @@ public class ItemSkuInfoVo implements Serializable {
      * spu规则参数
      */
     private List<SpuItemBaseAttr> itemBaseAttrs;
+
+    /**
+     * 商品秒杀信息
+     */
+    private SeckillSkuRedisDTO seckillSkuRedisDTO;
 
     @ToString
     @Data

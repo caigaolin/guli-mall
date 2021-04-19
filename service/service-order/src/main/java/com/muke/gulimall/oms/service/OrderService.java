@@ -1,6 +1,7 @@
 package com.muke.gulimall.oms.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.muke.common.to.mq.SeckillOrderTo;
 import com.muke.common.utils.PageUtils;
 import com.muke.gulimall.oms.entity.OrderEntity;
 import com.muke.gulimall.oms.vo.*;
@@ -39,5 +40,7 @@ public interface OrderService extends IService<OrderEntity> {
     Map<String, Object> getOrderListPage(Map<String, Object> params);
 
     void updateOrderStatus(PayAsyncVo payAsyncVo);
+
+    void seckillOrder(SeckillOrderTo orderTo);
 }
 

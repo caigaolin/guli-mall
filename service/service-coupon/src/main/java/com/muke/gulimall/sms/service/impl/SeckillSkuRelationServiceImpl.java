@@ -11,6 +11,7 @@ import com.muke.common.utils.Query;
 import com.muke.gulimall.sms.dao.SeckillSkuRelationDao;
 import com.muke.gulimall.sms.entity.SeckillSkuRelationEntity;
 import com.muke.gulimall.sms.service.SeckillSkuRelationService;
+import org.springframework.util.StringUtils;
 
 
 @Service("seckillSkuRelationService")
@@ -21,6 +22,21 @@ public class SeckillSkuRelationServiceImpl extends ServiceImpl<SeckillSkuRelatio
         IPage<SeckillSkuRelationEntity> page = this.page(
                 new Query<SeckillSkuRelationEntity>().getPage(params),
                 new QueryWrapper<SeckillSkuRelationEntity>()
+        );
+
+        return new PageUtils(page);
+    }
+
+    @Override
+    public PageUtils getSeckillRelation(Map<String, Object> params) {
+        QueryWrapper<SeckillSkuRelationEntity> queryWrapper = new QueryWrapper<>();
+        if (!StringUtils.isEmpty(params.get("promotionSessionId"))) {
+            long sessionId = Long.parseLong((String) params.get("promotionSessionId"));
+            queryWrapper.eq("promotion_session_id", sessionId);
+        }
+        IPage<SeckillSkuRelationEntity> page = this.page(
+                new Query<SeckillSkuRelationEntity>().getPage(params),
+                queryWrapper
         );
 
         return new PageUtils(page);

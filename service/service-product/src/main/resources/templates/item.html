@@ -521,8 +521,8 @@
                             <span>￥</span>
                             <span th:text="${#numbers.formatDecimal(item.getSkuInfo().getPrice(),0,2)}">4499.00</span>
                         </li>
-                        <li>
-                            预约享资格
+                        <li th:if="${item.getSeckillSkuRedisDTO() != null}">
+                            <span style="color: red">秒杀价：[[${#numbers.formatDecimal(item.getSeckillSkuRedisDTO().getSkuRelationDto().getSeckillPrice(), 0, 2)}]]</span>
                         </li>
                         <li>
                             <a href="/static/item/">
@@ -643,7 +643,10 @@
                         </div>
                     </div>
                     <div class="box-btns-two">
-                        <a href="#" id="addCart" th:attr="skuId=${item.getSkuInfo().getSkuId()}">
+                        <a href="#" th:if="${item.getSeckillSkuRedisDTO() != null}" id="killProduct"  th:attr="skuId=${item.getSkuInfo().getSkuId()},code=${item.getSeckillSkuRedisDTO().getRandomCode()},sessionId=${item.getSeckillSkuRedisDTO().getSkuRelationDto().getPromotionSessionId()}">
+                            立即抢购
+                        </a>
+                        <a href="#" th:if="${item.getSeckillSkuRedisDTO() == null}" id="addCart" th:attr="skuId=${item.getSkuInfo().getSkuId()}">
                             加入购物车
                         </a>
                     </div>
@@ -1329,6 +1332,23 @@
         var skuId = $("#addCart").attr("skuId")
         var num = $("#goodsNum").val()
         location.href = "http://cart.gulimall.com/toAddCart?skuId="+skuId+"&num="+num+""
+        return false
+    })
+
+    /**
+     * 监听立即抢购点击
+     */
+    $("#killProduct").click(function () {
+        // 判断用户是否登录
+        var isLogin = [[${session.member != null}]]
+        if (isLogin) {
+            var key = $(this).attr("sessionId") +"_"+ $(this).attr("skuId")
+            var code = $(this).attr("code")
+            var num = $("#goodsNum").val()
+            location.href = "http://seckill.gulimall.com/sls/kill?key="+key+"&code="+code+"&num="+num+""
+        } else {
+            alert("请先登录！！！")
+        }
         return false
     })
 </script>

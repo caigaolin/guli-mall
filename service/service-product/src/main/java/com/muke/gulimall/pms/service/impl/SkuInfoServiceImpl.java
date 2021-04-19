@@ -1,7 +1,12 @@
 package com.muke.gulimall.pms.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
+import com.muke.common.utils.R;
+import com.muke.gulimall.pms.dto.SeckillSkuRedisDTO;
 import com.muke.gulimall.pms.entity.SkuImagesEntity;
 import com.muke.gulimall.pms.entity.SpuInfoDescEntity;
+import com.muke.gulimall.pms.feign.SeckillFeign;
 import com.muke.gulimall.pms.service.AttrGroupService;
 import com.muke.gulimall.pms.service.SkuImagesService;
 import com.muke.gulimall.pms.service.SpuInfoDescService;
@@ -35,12 +40,12 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
 
     @Resource(name = "skuImagesService")
     private SkuImagesService imagesService;
-
     @Resource(name = "spuInfoDescService")
     private SpuInfoDescService descService;
-
     @Resource
     private AttrGroupService attrGroupService;
+    @Autowired
+    private SeckillFeign seckillFeign;
 
     @Autowired
     private ThreadPoolExecutor executor;
@@ -138,8 +143,20 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
             infoVo.setSkuImages(imagesEntities);
         }, executor);
 
+        CompletableFuture<Void> seckillInfoFuture = CompletableFuture.runAsync(() -> {
+            // 获取商品的秒杀信息
+            R info = seckillFeign.getSeckillInfoBySkuId(skuId);
+            if (info.getCode().equals(0)) {
+                Object seckillInfoObj = info.get("seckillInfo");
+                String seckillInfoStr = JSON.toJSONString(seckillInfoObj);
+                SeckillSkuRedisDTO seckillSkuRedisDTO = JSON.parseObject(seckillInfoStr, new TypeReference<SeckillSkuRedisDTO>() {
+                });
+                infoVo.setSeckillSkuRedisDTO(seckillSkuRedisDTO);
+            }
+        }, executor);
+
         // 只有当多有异步任务执行完成，才能返回结果
-        CompletableFuture.allOf(saleAttrFuture, descFuture, baseAttrFuture, imgFuture).get();
+        CompletableFuture.allOf(saleAttrFuture, descFuture, baseAttrFuture, imgFuture, seckillInfoFuture).get();
 
         return infoVo;
     }

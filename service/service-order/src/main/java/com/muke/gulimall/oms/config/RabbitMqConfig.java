@@ -50,6 +50,15 @@ public class RabbitMqConfig {
         return new Queue("order.release.queue", true, false, false);
     }
 
+    /**
+     * 秒杀队列
+     * @return
+     */
+    @Bean
+    public Queue orderSeckillQueue() {
+        return new Queue("order.seckill.queue", true, false, false);
+    }
+
     @Bean
     public Binding orderCreateBinding() {
         return new Binding("order.delay.queue",
@@ -74,6 +83,19 @@ public class RabbitMqConfig {
                 Binding.DestinationType.QUEUE,
                 "order-event-exchange",
                 "order.closed",
+                null);
+    }
+
+    /**
+     * 秒杀队列的绑定关系
+     * @return
+     */
+    @Bean
+    public Binding orderSeckillBinding() {
+        return new Binding("order.seckill.queue",
+                Binding.DestinationType.QUEUE,
+                "order-event-exchange",
+                "order-seckill-order",
                 null);
     }
 }

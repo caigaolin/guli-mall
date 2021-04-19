@@ -23,5 +23,11 @@ spring:
         acknowledge-mode: manual
   redis:
     host: 192.168.56.10
+  # 异步任务线程池设置
+  task:
+    execution:
+      pool:
+        max-size: 20
+        queue-capacity: 100
   session:
     store-type: redis

@@ -11,6 +11,7 @@ import com.muke.common.enums.CustomizeExceptionEnum;
 import com.muke.common.exception.RRException;
 import com.muke.common.to.SkuStockStatusTo;
 import com.muke.common.to.mq.OrderTo;
+import com.muke.common.to.mq.SeckillOrderTo;
 import com.muke.common.utils.PageUtils;
 import com.muke.common.utils.Query;
 import com.muke.common.utils.R;
@@ -285,6 +286,34 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
             baseMapper.updateOrderStatusByOrderSn(payAsyncVo.getOut_trade_no(), OrderStatusEnum.FINISHED_ORDER.getCode());
         }
 
+    }
+
+    /**
+     * 生成秒杀订单
+     * @param orderTo
+     */
+    @Override
+    public void seckillOrder(SeckillOrderTo orderTo) {
+        // 保存订单信息
+        OrderEntity orderEntity = new OrderEntity();
+        orderEntity.setOrderSn(orderTo.getOrderSn());
+        orderEntity.setStatus(OrderStatusEnum.WAIT_PAY.getCode());
+        orderEntity.setCreateTime(new Date());
+        // 计算应付金额
+        BigDecimal payAmount = orderTo.getKillPrice().add(new BigDecimal(orderTo.getNum()));
+        orderEntity.setPayAmount(payAmount);
+        // TODO 远程查询会员的默认收货地址
+        orderEntity.setMemberId(orderTo.getMemberId());
+        this.save(orderEntity);
+
+        // 保存订单项信息
+        OrderItemEntity itemEntity = new OrderItemEntity();
+        itemEntity.setOrderSn(orderTo.getOrderSn());
+        // TODO 根据skuId远程查询商品信息
+        itemEntity.setSkuId(orderTo.getSkuId());
+        itemEntity.setSkuQuantity(orderTo.getNum());
+        itemEntity.setRealAmount(payAmount);
+        orderItemService.save(itemEntity);
     }
 
 

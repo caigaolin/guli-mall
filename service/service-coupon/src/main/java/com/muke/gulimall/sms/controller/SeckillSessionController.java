@@ -1,14 +1,12 @@
 package com.muke.gulimall.sms.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
+import com.muke.gulimall.sms.dto.Recent3DaysSessionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.muke.gulimall.sms.entity.SeckillSessionEntity;
 import com.muke.gulimall.sms.service.SeckillSessionService;
@@ -25,10 +23,20 @@ import com.muke.common.utils.R;
  * @date 2021-02-26 12:23:44
  */
 @RestController
-@RequestMapping("sms/seckillsession")
+@RequestMapping("coupon/seckillsession")
 public class SeckillSessionController {
     @Autowired
     private SeckillSessionService seckillSessionService;
+
+    /**
+     * 获取最近3天的活动信息
+     * @return
+     */
+    @GetMapping("/recent-3days/session")
+    public R getRecent3DaysSession() {
+        List<Recent3DaysSessionDTO> recentList =  seckillSessionService.getRecent3DaysSession();
+        return R.ok().put("recentList", recentList);
+    }
 
     /**
      * 列表

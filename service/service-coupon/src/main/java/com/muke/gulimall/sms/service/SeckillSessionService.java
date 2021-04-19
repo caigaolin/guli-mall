@@ -2,8 +2,10 @@ package com.muke.gulimall.sms.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.muke.common.utils.PageUtils;
+import com.muke.gulimall.sms.dto.Recent3DaysSessionDTO;
 import com.muke.gulimall.sms.entity.SeckillSessionEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,5 +18,7 @@ import java.util.Map;
 public interface SeckillSessionService extends IService<SeckillSessionEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    List<Recent3DaysSessionDTO> getRecent3DaysSession();
 }
 
