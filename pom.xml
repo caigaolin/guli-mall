@@ -22,8 +22,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <cloud.version>Hoxton.RELEASE</cloud.version>
-        <cloud-alibaba.version>2.2.1.RELEASE</cloud-alibaba.version>
-        <spring-boot.version>2.2.1.RELEASE</spring-boot.version>
+        <cloud-alibaba.version>2.2.0.RELEASE</cloud-alibaba.version>
+        <spring-boot.version>2.2.2.RELEASE</spring-boot.version>
         <maven.version>3.8.1</maven.version>
         <mybatis-plus.version>3.3.1</mybatis-plus.version>
         <swagger.version>2.7.0</swagger.version>

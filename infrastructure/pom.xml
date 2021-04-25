@@ -13,26 +13,13 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>renren-generator</module>
         <module>service-gateway</module>
         <module>third-party</module>
         <module>service-search</module>
-        <module>renren-fast</module>
         <module>service-auth</module>
     </modules>
 
     <dependencies>
-        <dependency>
-            <groupId>com.muke</groupId>
-            <artifactId>common-utils</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-web</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
         <!--服务注册-->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>

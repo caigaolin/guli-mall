@@ -14,6 +14,10 @@ spring:
     nacos:
       discovery:
         server-addr: localhost:8848
+    sentinel:
+      transport:
+        dashboard: localhost:8111
+        port: 8719
   thymeleaf:
     cache: false
   redis:
@@ -21,9 +25,33 @@ spring:
     port: 6379
   session:
     store-type: redis
+  zipkin:
+    # zipkin服务器地址
+    base-url: http://192.168.56.10:9411/
+    # 关闭zipkin的服务发现，否则spring cloud会将url作为服务名
+    discovery-client-enabled: false
+    # 设置http方式传输数据
+    sender:
+      type: web
+  sleuth:
+    sampler:
+      probability: 1 # 设置sleuth的采样率，默认为0.1，即10%
 
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*.xml
   global-config:
     db-config:
       id-type: auto
+
+# 健康检查暴露的端点配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+# 开启debug日志
+logging:
+  level:
+    org.springframework.cloud.openfeign: debug
+    org.springframework.cloud.sleuth: debug

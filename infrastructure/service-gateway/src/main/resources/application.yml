@@ -1,11 +1,34 @@
 server:
   port: 88
+# 健康检查暴露的端点配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
 
 spring:
+  zipkin:
+    # zipkin服务器地址
+    base-url: http://192.168.56.10:9411/
+    # 关闭zipkin的服务发现，否则spring cloud会将url作为服务名
+    discovery-client-enabled: false
+    # 设置http方式传输数据
+    sender:
+      type: web
+  sleuth:
+    sampler:
+      probability: 1 # 设置sleuth的采样率，默认为0.1，即10%
+  redis:
+    host: 192.168.56.10
   cloud:
     nacos:
       discovery:
         server-addr: localhost:8848
+    sentinel:
+      transport:
+        dashboard: localhost:8111
+        port: 8719
     gateway:
       discovery:
         locator:

@@ -32,7 +32,7 @@ public class SeckillSchedule {
      *   每天3点执行定时任务
      */
     @Async
-    @Scheduled(cron = "*/5 * * * * ?")
+    @Scheduled(cron = "*/6 * * * * ?")
     public void upProducts3Days() {
         log.info("开始上架秒杀商品......");
         // 获取分布式锁，只有一个线程能执行定时任务

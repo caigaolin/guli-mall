@@ -13,6 +13,9 @@ public enum  CustomizeExceptionEnum {
      */
     ENTITY_VALID_EX(10001, "实体校验异常"),
     NOT_FOUND_DATA(10002, "数据未查询到"),
+    TOO_MANY_REQUEST(10003, "请求次数过多"),
+    FEIGN_EX(10004, "远程调用异常"),
+    GATEWAY_EX(10005, "网关限流异常"),
     /**
      * 11：表示商品服务异常
      */

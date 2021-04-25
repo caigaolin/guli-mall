@@ -1,6 +1,7 @@
 package com.muke.gulimall.oms.config;
 
 import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
@@ -8,10 +9,8 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-
 /**
+ * rabbitmq配置，解决与sentinel整合后的依赖循环引用问题
  * @author 木可
  * @version 1.0
  * @date 2021/3/26 17:21
@@ -19,14 +18,21 @@ import javax.annotation.Resource;
 @Configuration
 public class RabbitConfig {
 
-    @Resource
     private RabbitTemplate rabbitTemplate;
+
+    @Bean
+    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
+        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+        this.rabbitTemplate = rabbitTemplate;
+        rabbitTemplate.setMessageConverter(messageConverter());
+        initRabbitTemplate();
+        return rabbitTemplate;
+    }
 
     /**
      * 配置消息序列化规则
      * @return MessageConverter
      */
-    @Bean
     public MessageConverter messageConverter() {
         return new Jackson2JsonMessageConverter();
     }
@@ -51,7 +57,7 @@ public class RabbitConfig {
      *
      *
      */
-    @PostConstruct
+    //@PostConstruct
     public void initRabbitTemplate() {
         // 设置消息到达broker回调
         rabbitTemplate.setConfirmCallback(new RabbitTemplate.ConfirmCallback() {
